@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartDrop - Çok Yakında!</title>
+    <title>SmartDrop - Geleceğin Akıllı Lojistik Ağı</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,50 +32,58 @@
             border-image: linear-gradient(135deg, #E5C158, #9B782B) 1;
         }
         .glow-effect {
-            box-shadow: 0 0 35px -5px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 50px -5px rgba(212, 175, 55, 0.25);
+        }
+        .logo-glow {
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.3));
         }
     </style>
 </head>
 <body class="bg-brandNavyDark text-white font-sans min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-brandGold selection:text-brandNavy">
 
     <!-- Arka Plan Dekoratif Işıklar -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brandNavy rounded-full blur-[120px] pointer-events-none opacity-50"></div>
-    <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-brandGold/10 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brandNavy rounded-full blur-[140px] pointer-events-none opacity-60"></div>
+    <div class="absolute top-1/3 right-0 w-[500px] h-[500px] bg-brandGold/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <!-- Üst Header / Logo -->
+    <!-- Üst Header / Menü -->
     <header class="container mx-auto px-6 py-8 flex justify-between items-center relative z-10">
-        <div class="flex items-center space-x-3">
-            <!-- Logoyu görsel dosyası olarak eklemek istersen src="logo.png" yapabilirsin -->
-            <div class="text-2xl font-bold tracking-wider">
-                <span class="text-white">Smart</span><span class="gold-gradient-text">Drop</span>
-            </div>
+        <div class="text-2xl font-bold tracking-wider">
+            <span class="text-white">Smart</span><span class="gold-gradient-text">Drop</span>
         </div>
-        <a href="https://github.com" target="_blank" class="text-gray-400 hover:text-brandGold transition-colors text-xl">
-            <i class="fab fa-github"></i>
-        </a>
+        <div class="flex items-center space-x-6">
+            <span class="text-xs uppercase tracking-widest text-brandGold font-semibold border border-brandGold/30 px-3 py-1.5 rounded-full bg-brandNavy/50 backdrop-blur-md">
+                <i class="fas fa-clock mr-1.5"></i> Yakında Sizlerle
+            </span>
+        </div>
     </header>
 
-    <!-- Ana İçerik (Hero Section) -->
-    <main class="container mx-auto px-6 flex-1 flex flex-col items-center justify-center text-center relative z-10 my-12">
+    <!-- Ana İçerik (Hero & Logo Bölümü) -->
+    <main class="container mx-auto px-6 flex-1 flex flex-col items-center justify-center text-center relative z-10 my-8">
         
-        <!-- Rozet / Badge -->
-        <div class="inline-flex items-center space-x-2 bg-brandNavy/80 border border-brandGold/30 px-4 py-2 rounded-full mb-8 glow-effect backdrop-blur-md">
-            <span class="w-2.5 h-2.5 rounded-full bg-brandGold animate-ping"></span>
-            <span class="text-xs uppercase tracking-widest text-brandGold font-semibold">Geliştirme Aşamasında</span>
+        <!-- Dev Logo Alanı -->
+        <div class="relative mb-10 group">
+            <div class="absolute inset-0 bg-gradient-to-r from-brandGold/20 to-brandNavy/40 rounded-full blur-3xl scale-110 group-hover:scale-125 transition-all duration-500"></div>
+            
+            <!-- Logo Görseli (Eğer logo.png dosyanız varsa bu img etiketini kullanın) -->
+            <div class="relative z-10 bg-brandNavy/60 border border-brandGold/30 p-8 md:p-12 rounded-3xl backdrop-blur-xl shadow-2xl glow-effect flex items-center justify-center max-w-sm md:max-w-md mx-auto">
+                <img src="logo.png" alt="SmartDrop Logo" class="w-full h-auto object-contain logo-glow" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-5xl md:text-6xl font-black tracking-tight py-4\'><span class=\'text-white\'>Smart</span><span class=\'gold-gradient-text\'>Drop</span></div>'">
+            </div>
         </div>
 
-        <!-- Başlık & Açıklama -->
-        <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight max-w-4xl">
-            Akıllı Teslimat ve Lojistikte <br class="hidden md:block"/>
-            <span class="gold-gradient-text">Yeni Nesil Dönem</span> Çok Yakında!
+        <!-- Rozet / Badge -->
+        <div class="inline-flex items-center space-x-2 bg-brandNavy/80 border border-brandGold/30 px-5 py-2 rounded-full mb-6 glow-effect backdrop-blur-md">
+            <span class="w-2.5 h-2.5 rounded-full bg-brandGold animate-ping"></span>
+            <span class="text-xs uppercase tracking-widest text-brandGold font-bold">Yeni Nesil Lojistik Teknolojisi</span>
+        </div>
+
+        <!-- Başlık -->
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-6 leading-tight max-w-4xl">
+            Geleceğin Akıllı Lojistik Ağını <br class="hidden md:block"/>
+            <span class="gold-gradient-text">Bugün İnşa Ediyoruz</span>
         </h1>
         
-        <p class="text-gray-300 text-lg md:text-xl max-w-2xl mb-12 font-light leading-relaxed">
-            SmartDrop; hızlı, güvenli ve akıllı teslimat çözümleriyle süreçlerinizi kolaylaştırmak için hazırlanıyor. Açılıştan ilk siz haberdar olun.
-        </p>
-
         <!-- E-posta Kayıt Formu -->
-        <div class="w-full max-w-md mb-12">
+        <div class="w-full max-w-md my-8">
             <form id="notify-form" class="flex flex-col sm:flex-row gap-3">
                 <input 
                     type="email" 
@@ -93,40 +101,88 @@
             <p id="form-message" class="text-xs text-brandGold mt-3 hidden">Talebiniz alındı! Açılışta size bildirim göndereceğiz.</p>
         </div>
 
-        <!-- Öne Çıkan Özellik İkonları -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl text-left mt-8">
-            <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
-                <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
-                    <i class="fas fa-bolt"></i>
+        <!-- Hakkımızda / Giriş Paragrafı -->
+        <div class="w-full max-w-4xl bg-brandNavy/40 border border-brandGold/20 rounded-3xl p-8 md:p-10 backdrop-blur-md text-left my-8 shadow-xl">
+            <h2 class="text-xl md:text-2xl font-bold mb-4 gold-gradient-text flex items-center">
+                <i class="fas fa-cubes mr-3"></i> SmartDrop Hakkında
+            </h2>
+            <p class="text-gray-300 text-base md:text-lg font-light leading-relaxed">
+                Günümüz e-ticaret dünyasında yaşanan en büyük operational verimsizliklerden biri, son mil (last-mile) teslimatlarındaki belirsizlikler ve başarısız teslimat denemeleridir. Geliştirdiğimiz akıllı kargo ve teslimat yönetim platformu; tüm kargo takip süreçlerini tek bir çatı altında toplarken, teslimat öncesi sunduğu canlı teyit mekanizması ile lojistik sektörüne yenilikçi bir boyut kazandırıyor. Dağıtımdan 24 saat önce kullanıcıya ulaşıp teslimat durumunu doğrulayarak; kargo firmalarının yakıt, zaman ve operasyonel maliyetlerini minimuma indiriyor, karbon ayak izini azaltıyor ve alıcılara %100 kontrol sağlayan esnek bir teslimat deneyimi sunuyoruz. Sürdürülebilir, verimli ve kullanıcı odaklı bir lojistik ekosistemi için teknolojiyi süreç yeniliğiyle birleştiriyoruz.
+            </p>
+        </div>
+
+        <!-- Misyon & Vizyon Bölümü -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl text-left my-6">
+            <!-- Misyon -->
+            <div class="p-8 rounded-3xl bg-brandNavy/40 border border-white/10 backdrop-blur-md hover:border-brandGold/40 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-2xl mb-6">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="font-bold text-2xl mb-3 text-white">Misyonumuz</h3>
+                    <p class="text-gray-300 leading-relaxed font-light">
+                        Son mil lojistiğindeki iletişim kopukluğunu ortadan kaldırarak; kargo firmaları için operasyonel maliyetleri düşüren, alıcılar için ise teslimat süreçlerini zahmetsiz ve esnek hale getiren akıllı bir yönlendirme platformu sunmak.
+                    </p>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Işık Hızında Teslimat</h3>
-                <p class="text-gray-400 text-sm">Gelişmiş rota algoritmaları ile en hızlı ve verimli teslimat süreci.</p>
             </div>
 
-            <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
-                <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
-                    <i class="fas fa-shield-alt"></i>
+            <!-- Vizyon -->
+            <div class="p-8 rounded-3xl bg-brandNavy/40 border border-white/10 backdrop-blur-md hover:border-brandGold/40 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-brandGold/10 border border-brandGold/30 flex items-center justify-center text-brandGold text-2xl mb-6">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="font-bold text-2xl mb-3 text-white">Vizyonumuz</h3>
+                    <p class="text-gray-300 leading-relaxed font-light">
+                        Yapay zeka ve dinamik rota optimizasyon desteğiyle, gereksiz kargo seferlerinin sıfırlandığı, doğa dostu ve %100 ilk seferde teslimat başarısına ulaşan küresel bir dijital lojistik standardı oluşturmak.
+                    </p>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Güvenli Altyapı</h3>
-                <p class="text-gray-400 text-sm">Süreç boyunca tam şeffaflık, uçtan uca takip ve yüksek güvenlik standartları.</p>
             </div>
+        </div>
 
-            <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
-                <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
-                    <i class="fas fa-box-open"></i>
+        <!-- Öne Çıkan Özellikler -->
+        <div class="w-full max-w-4xl my-12">
+            <h2 class="text-2xl md:text-3xl font-extrabold mb-8 gold-gradient-text text-center">
+                Neler Sunuyoruz?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                <!-- Özellik 1 -->
+                <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-white">Konsolide Takip</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Tüm kargo şirketlerini tek bir panelden anlık izleme olanağı.</p>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Akıllı Takip</h3>
-                <p class="text-gray-400 text-sm">Gönderilerinizin anlık durumunu canlı harita ve bildirimlerle izleyin.</p>
+
+                <!-- Özellik 2 -->
+                <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-white">Akıllı Teyit</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Teslimat gününden önce "Evde misiniz?" bildirimi ile boşa seferlerin önlenmesi.</p>
+                </div>
+
+                <!-- Özellik 3 -->
+                <div class="p-6 rounded-2xl bg-brandNavy/40 border border-white/5 backdrop-blur-sm hover:border-brandGold/30 transition-all">
+                    <div class="w-12 h-12 rounded-xl bg-brandGold/10 flex items-center justify-center text-brandGold text-xl mb-4">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 text-white">Dinamik Rota ve Esneklik</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">Komşuya bırakma, tarihi erteleme veya alternatif noktaya yönlendirme seçenekleri.</p>
+                </div>
             </div>
         </div>
 
     </main>
 
     <!-- Footer / Alt Alan -->
-    <footer class="container mx-auto px-6 py-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 relative z-10">
+    <footer class="container mx-auto px-6 py-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 relative z-10">
         <p>&copy; 2026 SmartDrop. Tüm hakları saklıdır.</p>
-        <div class="flex space-x-4 mt-3 sm:mt-0">
+        <div class="flex space-x-6 mt-4 sm:mt-0">
             <a href="#" class="hover:text-brandGold transition-colors">Gizlilik Politikası</a>
+            <a href="#" class="hover:text-brandGold transition-colors">Kullanım Şartları</a>
             <a href="#" class="hover:text-brandGold transition-colors">İletişim</a>
         </div>
     </footer>
