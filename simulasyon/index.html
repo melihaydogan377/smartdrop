@@ -52,7 +52,6 @@
             from { opacity: 0; transform: translateY(-120%); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Özel Zaman Aralığı Slider Stili */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -81,10 +80,9 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-brandGold selection:text-brandNavyDark">
 
-    <!-- Arka Plan Işımaları -->
     <div class="fixed top-10 left-1/3 w-[420px] h-[420px] bg-brandNavy rounded-full blur-[140px] opacity-60 pointer-events-none"></div>
 
-    <!-- Sade Üst Bar -->
+    <!-- Üst Bar -->
     <header class="border-b border-white/10 bg-brandNavyDark/90 backdrop-blur-md sticky top-0 z-40">
         <div class="container mx-auto px-5 py-3 flex justify-between items-center">
             <a href="../" class="flex items-center gap-2">
@@ -104,7 +102,7 @@
         </div>
     </header>
 
-    <!-- Tek Odaklı Mobil Uygulama Sahnesi -->
+    <!-- Mobil Uygulama Sahnesi -->
     <main class="container mx-auto px-4 py-5 flex-1 flex items-center justify-center relative z-10">
         <div class="phone-shell w-[365px] sm:w-[390px] h-[750px] bg-[#041229] rounded-[3rem] border-[8px] border-[#15294B] flex flex-col justify-between overflow-hidden relative">
             
@@ -151,7 +149,6 @@
     </main>
 
     <script>
-        // --- DİNAMİK TAKVİM (Önümüzdeki 3 Gün) ---
         function getUpcomingDays() {
             const daysTr = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
             const monthsTr = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
@@ -179,32 +176,34 @@
             { id: "apt", label: "Apartman Görevlisi", icon: "fa-user-tie" }
         ];
 
-        // 09:00 (540 dk) - 20:00 (1200 dk) arası yarım saatlik formatlayıcı
         function formatMinutes(mins) {
             const h = Math.floor(mins / 60).toString().padStart(2, "0");
             const m = (mins % 60).toString().padStart(2, "0");
             return `${h}:${m}`;
         }
 
-        // --- UYGULAMA DURUMU ---
         let appState = {
             connected: false,
             phone: "+90 532 480 26 16",
             channel: "Push",
-            startMins: 840, // 14:00
-            endMins: 1020,  // 17:00
+            startMins: 840,
+            endMins: 1020,
             selectedDayIndex: 0,
-            resStartMins: 960, // 16:00
-            resEndMins: 1140,  // 19:00
+            resStartMins: 960,
+            resEndMins: 1140,
             selectedLockerIndex: 0,
             selectedDropSpot: "security",
             mergedSecondCargo: false,
             decisionType: null,
+            activeTrackingCode: "SD-84920",
+            activeCarrier: "Yurtiçi Kargo",
+            activeStore: "Trendyol Teknoloji",
             deliverySummary: "Yarın • 14:00 - 17:00",
             deliveryBadge: "Saat Seçimi Bekliyor",
             deliveryBadgeClass: "bg-brandGold/20 text-brandGold border-brandGold/40",
             pinCode: "4829",
-            pushShown: false
+            pushShown: false,
+            manualCargos: []
         };
 
         function setActiveTab(tabName) {
@@ -218,7 +217,7 @@
 
         function navTo(target) {
             if (!appState.connected && target !== "connect") {
-                showToast("Devam etmek için numaranızı doğrulayın");
+                showToast("Önce telefon veya takip kodu ile giriş yapın");
                 renderConnect();
                 return;
             }
@@ -241,7 +240,7 @@
                             <span class="text-[10px] font-extrabold text-brandGold uppercase">SmartDrop • Şimdi</span>
                             <span class="text-[10px] text-gray-400">Aç</span>
                         </div>
-                        <p class="text-xs font-bold text-white mt-0.5">Yarın 2 kargonuz dağıtıma çıkıyor</p>
+                        <p class="text-xs font-bold text-white mt-0.5">Yarın kargonuz dağıtıma çıkıyor</p>
                         <p class="text-[11px] text-gray-300">09:00 - 20:00 arası uygun saatinizi seçin.</p>
                     </div>
                 </div>
@@ -264,43 +263,77 @@
             setTimeout(() => { container.innerHTML = ""; }, 2200);
         }
 
-        // --- 1. EKRAN: NUMARA BAĞLAMA ---
+        // --- 1. EKRAN: NUMARA BAĞLAMA VEYA TAKİP KODU İLE EKLEME ---
         function renderConnect() {
             setActiveTab("connect");
             document.getElementById("screen").innerHTML = `
-                <div class="slide-in flex flex-col justify-between h-full">
-                    <div class="text-center mt-6">
-                        <div class="w-16 h-16 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-2xl mx-auto mb-4">
-                            <i class="fas fa-mobile-alt"></i>
+                <div class="slide-in flex flex-col justify-between h-full space-y-4">
+                    <div class="text-center mt-2">
+                        <div class="w-14 h-14 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-xl mx-auto mb-3">
+                            <i class="fas fa-box-open"></i>
                         </div>
-                        <h3 class="text-xl font-extrabold text-white">Kargolarını Tek Yerde Gör</h3>
-                        <p class="text-xs text-gray-400 mt-1.5 px-2">
-                            Takip kodu girmeden tüm kargolarını otomatik listele.
+                        <h3 class="text-lg font-extrabold text-white">Kargolarını Yönet</h3>
+                        <p class="text-[11px] text-gray-400 mt-1">
+                            Numaranı bağla veya doğrudan takip koduyla kargo ekle.
                         </p>
                     </div>
 
-                    <div class="space-y-3 my-4">
-                        <div class="bg-brandNavy/80 border border-brandGold/30 rounded-2xl p-4 space-y-2">
-                            <label class="text-[11px] text-gray-400 font-semibold">Cep Telefonu Numaran</label>
-                            <div class="flex items-center bg-brandNavyDark border border-brandGold/40 rounded-xl px-3.5 py-3">
-                                <i class="fas fa-phone text-brandGold mr-2.5 text-sm"></i>
-                                <input id="phone-input" type="text" value="${appState.phone}" class="bg-transparent text-white font-bold text-sm w-full focus:outline-none">
-                            </div>
+                    <!-- YÖNTEM 1: TELEFON İLE OTOMATİK -->
+                    <div class="bg-brandNavy/80 border border-brandGold/30 rounded-2xl p-3.5 space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <label class="text-[11px] text-brandGold font-bold">1. Otomatik Tarama (Telefon)</label>
+                            <span class="text-[10px] text-gray-400">Tüm Firmalar</span>
                         </div>
-
-                        <div class="flex items-center justify-between text-[11px] text-gray-400 px-2">
-                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Yurtiçi</span>
-                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Aras</span>
-                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>MNG</span>
-                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Trendyol Exp.</span>
+                        <div class="flex items-center bg-brandNavyDark border border-white/15 rounded-xl px-3 py-2.5">
+                            <i class="fas fa-phone text-brandGold mr-2 text-xs"></i>
+                            <input id="phone-input" type="text" value="${appState.phone}" class="bg-transparent text-white font-bold text-xs w-full focus:outline-none">
                         </div>
+                        <button onclick="startOtpVerification()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-xs shadow-lg active:scale-95 transition-all">
+                            Numara ile Devam Et <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
                     </div>
 
-                    <button onclick="startOtpVerification()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-sm shadow-xl active:scale-95 transition-all">
-                        Devam Et <i class="fas fa-arrow-right ml-1.5"></i>
-                    </button>
+                    <!-- AYIRAÇ -->
+                    <div class="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
+                        <div class="h-px bg-white/10 flex-1"></div>
+                        <span>veya kod ile ekle</span>
+                        <div class="h-px bg-white/10 flex-1"></div>
+                    </div>
+
+                    <!-- YÖNTEM 2: MANUEL TAKİP KODU GİRİŞİ -->
+                    <div class="bg-white/5 border border-white/15 rounded-2xl p-3.5 space-y-2.5">
+                        <label class="text-[11px] text-white font-bold block">2. Takip Numarası ile Ekle</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="entry-carrier" class="col-span-1 bg-brandNavyDark border border-white/15 rounded-xl px-2 py-2.5 text-[11px] text-white font-semibold focus:outline-none focus:border-brandGold">
+                                <option value="Yurtiçi Kargo">Yurtiçi</option>
+                                <option value="Aras Kargo">Aras</option>
+                                <option value="MNG Kargo">MNG</option>
+                                <option value="PTT Kargo">PTT</option>
+                                <option value="Trendyol Exp.">Trendyol</option>
+                            </select>
+                            <input id="entry-code" type="text" placeholder="Takip Kodu (Örn: 9482710)" class="col-span-2 bg-brandNavyDark border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 font-mono focus:outline-none focus:border-brandGold">
+                        </div>
+                        <button onclick="startWithManualCode()" class="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-xs transition-all">
+                            <i class="fas fa-plus mr-1 text-brandGold"></i> Kargo Koduyla Ekle
+                        </button>
+                    </div>
                 </div>
             `;
+        }
+
+        function startWithManualCode() {
+            const carrier = document.getElementById("entry-carrier").value;
+            const rawCode = document.getElementById("entry-code").value.trim().toUpperCase();
+            const code = rawCode || "9482710";
+
+            appState.connected = true;
+            appState.activeCarrier = carrier;
+            appState.activeTrackingCode = code;
+            appState.activeStore = "Manuel Eklenen Gönderi";
+            document.getElementById("tab-dot").classList.remove("hidden");
+
+            showToast(`${carrier} (#${code}) eklendi`);
+            renderDashboard();
         }
 
         function startOtpVerification() {
@@ -343,7 +376,7 @@
             }, 1250);
         }
 
-        // --- 2. EKRAN: KARGOLARIM ---
+        // --- 2. EKRAN: KARGOLARIM + KOD İLE EKLEME ÇUBUĞU ---
         function renderDashboard() {
             setActiveTab("dashboard");
             const isConfirmed = appState.decisionType !== null;
@@ -355,20 +388,41 @@
                             <span class="text-[10px] text-gray-400 block">${appState.phone}</span>
                             <h3 class="text-lg font-extrabold text-white">Kargolarım</h3>
                         </div>
-                        <button onclick="showToast('Tüm kargolar güncel')" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-brandGold flex items-center justify-center text-xs">
-                            <i class="fas fa-sync-alt"></i>
+                        <button onclick="toggleQuickAddBox()" class="px-3 py-1.5 rounded-xl bg-brandGold/15 hover:bg-brandGold/25 border border-brandGold/40 text-brandGold text-xs font-bold flex items-center gap-1.5 transition-all">
+                            <i class="fas fa-plus"></i> Kod Ekle
                         </button>
                     </div>
 
-                    <!-- AKTİF KARGO KARTI (#SD-84920) -->
+                    <!-- HIZLI TAKİP KODU EKLEME ALANI (Açılır/Kapanır) -->
+                    <div id="quick-add-box" class="hidden bg-brandNavyDark border border-brandGold/40 rounded-2xl p-3 space-y-2 slide-in">
+                        <div class="flex justify-between items-center text-[11px]">
+                            <span class="text-brandGold font-bold">Takip Kodu ile Kargo Ekle</span>
+                            <button onclick="toggleQuickAddBox()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <select id="dash-carrier" class="col-span-1 bg-[#071936] border border-white/15 rounded-xl px-2 py-2 text-[11px] text-white font-semibold focus:outline-none">
+                                <option value="PTT Kargo">PTT</option>
+                                <option value="Yurtiçi Kargo">Yurtiçi</option>
+                                <option value="Aras Kargo">Aras</option>
+                                <option value="MNG Kargo">MNG</option>
+                                <option value="Sürat Kargo">Sürat</option>
+                            </select>
+                            <input id="dash-code" type="text" placeholder="Takip Kodu Girin" class="col-span-2 bg-[#071936] border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white placeholder-gray-500 font-mono focus:outline-none focus:border-brandGold">
+                        </div>
+                        <button onclick="addManualCargoInDashboard()" class="w-full py-2 rounded-xl bg-brandGold text-brandNavyDark font-extrabold text-xs">
+                            Listeye Ekle
+                        </button>
+                    </div>
+
+                    <!-- AKTİF KARGO KARTI -->
                     <div class="bg-gradient-to-br from-brandNavy to-[#071E42] border ${isConfirmed ? 'border-emerald-500/50' : 'border-brandGold'} rounded-2xl p-4 shadow-xl space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs font-extrabold text-white">Yurtiçi Kargo</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">#SD-84920</span>
+                                    <span class="text-xs font-extrabold text-white">${appState.activeCarrier}</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">#${appState.activeTrackingCode}</span>
                                 </div>
-                                <p class="text-[11px] text-gray-300 mt-0.5">Trendyol Teknoloji</p>
+                                <p class="text-[11px] text-gray-300 mt-0.5">${appState.activeStore}</p>
                             </div>
                             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold border ${appState.deliveryBadgeClass}">
                                 ${appState.deliveryBadge}
@@ -384,7 +438,6 @@
                         </div>
 
                         ${isConfirmed ? `
-                            <!-- Canlı Kurye Yaklaşım Bilgisi -->
                             <div class="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-2.5 flex items-center justify-between text-[11px]">
                                 <span class="text-emerald-300 flex items-center gap-1.5 font-semibold">
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -399,7 +452,20 @@
                         </button>
                     </div>
 
-                    <!-- İKİNCİ KARGO (BİRLEŞTİRİLEBİLİR) -->
+                    <!-- MANUEL EKLENEN KARGOLAR -->
+                    ${appState.manualCargos.map((mc, idx) => `
+                        <div class="bg-white/5 border border-brandGold/30 rounded-2xl p-3.5 flex justify-between items-center slide-in">
+                            <div>
+                                <div class="text-xs font-bold text-white">${mc.carrier} <span class="text-[10px] text-brandGold font-mono">#${mc.code}</span></div>
+                                <div class="text-[11px] text-gray-300 mt-0.5">${mc.summary}</div>
+                            </div>
+                            <button onclick="selectManualCargoForManage(${idx})" class="px-3 py-1.5 rounded-xl bg-brandGold/20 text-brandGold text-[11px] font-bold hover:bg-brandGold hover:text-brandNavyDark transition-all">
+                                Yönet
+                            </button>
+                        </div>
+                    `).join("")}
+
+                    <!-- İKİNCİ KARGO -->
                     <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
                         <div class="flex justify-between items-center">
                             <div>
@@ -434,6 +500,45 @@
             `;
         }
 
+        function toggleQuickAddBox() {
+            const box = document.getElementById("quick-add-box");
+            if (box) box.classList.toggle("hidden");
+        }
+
+        function addManualCargoInDashboard() {
+            const carrier = document.getElementById("dash-carrier").value;
+            const rawCode = document.getElementById("dash-code").value.trim().toUpperCase();
+            if (!rawCode) {
+                showToast("Lütfen bir takip kodu girin");
+                return;
+            }
+            appState.manualCargos.unshift({
+                carrier: carrier,
+                code: rawCode,
+                summary: "Yarın • 14:00 - 17:00 (Yeni Eklendi)"
+            });
+            showToast(`${carrier} (#${rawCode}) eklendi`);
+            renderDashboard();
+        }
+
+        function selectManualCargoForManage(idx) {
+            const selected = appState.manualCargos[idx];
+            if (!selected) return;
+            appState.manualCargos.splice(idx, 1);
+            appState.manualCargos.push({
+                carrier: appState.activeCarrier,
+                code: appState.activeTrackingCode,
+                summary: appState.deliverySummary
+            });
+            appState.activeCarrier = selected.carrier;
+            appState.activeTrackingCode = selected.code;
+            appState.activeStore = "Kod ile Eklenen Gönderi";
+            appState.decisionType = null;
+            appState.deliveryBadge = "Saat Seçimi Bekliyor";
+            appState.deliveryBadgeClass = "bg-brandGold/20 text-brandGold border-brandGold/40";
+            renderOptions();
+        }
+
         function mergeCargos() {
             appState.mergedSecondCargo = true;
             showToast("2 kargo aynı zaman diliminde birleştirildi");
@@ -450,7 +555,6 @@
 
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in space-y-3.5">
-                    <!-- Üst Geri & Bildirim Kanalı -->
                     <div class="flex justify-between items-center">
                         <button onclick="renderDashboard()" class="text-xs text-gray-400 hover:text-white flex items-center gap-1">
                             <i class="fas fa-arrow-left"></i> Geri
@@ -469,20 +573,18 @@
                             <span class="text-[10px] bg-brandGold/20 text-brandGold px-2 py-0.5 rounded font-bold">${durationHours} Saatlik Aralık</span>
                         </div>
 
-                        <!-- Seçilen Saat Göstergesi -->
                         <div class="bg-brandNavyDark border border-white/10 rounded-xl py-2.5 px-4 flex items-center justify-between">
                             <div class="text-center">
                                 <span class="text-[10px] text-gray-400 block">Başlangıç</span>
-                                <span id="start-label" class="text-base font-extrabold text-brandGold">${formatMinutes(appState.startMins)}</span>
+                                <span class="text-base font-extrabold text-brandGold">${formatMinutes(appState.startMins)}</span>
                             </div>
                             <i class="fas fa-arrow-right text-gray-500 text-xs"></i>
                             <div class="text-center">
                                 <span class="text-[10px] text-gray-400 block">Bitiş</span>
-                                <span id="end-label" class="text-base font-extrabold text-brandGold">${formatMinutes(appState.endMins)}</span>
+                                <span class="text-base font-extrabold text-brandGold">${formatMinutes(appState.endMins)}</span>
                             </div>
                         </div>
 
-                        <!-- Kaydırıcılar (09:00 = 540 dk, 20:00 = 1200 dk) -->
                         <div class="space-y-2 pt-1">
                             <div>
                                 <div class="flex justify-between text-[10px] text-gray-400 mb-0.5">
@@ -500,12 +602,12 @@
                             </div>
                         </div>
 
-                        <button id="confirm-range-btn" onclick="applyDecision('tomorrow')" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-brandNavyDark font-extrabold text-xs transition-all shadow-lg">
+                        <button onclick="applyDecision('tomorrow')" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-brandNavyDark font-extrabold text-xs transition-all shadow-lg">
                             Yarın ${rangeText} Onayla
                         </button>
                     </div>
 
-                    <!-- EVDE DEĞİLSENİZ ALTERNATİFLER -->
+                    <!-- ALTERNATİFLER -->
                     <div class="space-y-2">
                         <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold block">Evde Değilsen Diğer Seçenekler</span>
 
@@ -573,7 +675,6 @@
             renderOptions();
         }
 
-        // --- TEMASSIZ GÜVENLİ NOKTA SEÇİMİ ---
         function renderDropSpot() {
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
@@ -603,7 +704,6 @@
             `;
         }
 
-        // --- KOMŞU SEÇİMİ ---
         function renderNeighbor() {
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
@@ -633,7 +733,6 @@
             `;
         }
 
-        // --- KARGO OTOMATI SEÇİMİ ---
         function renderLocker() {
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
@@ -661,7 +760,6 @@
             `;
         }
 
-        // --- 3 GÜN İÇİNDE GÜN + SERBEST SAAT ERTELEME ---
         function renderReschedule() {
             const chosenDay = upcomingDays[appState.selectedDayIndex];
             const resRange = `${formatMinutes(appState.resStartMins)} - ${formatMinutes(appState.resEndMins)}`;
@@ -672,7 +770,6 @@
                         <button onclick="renderOptions()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i>Geri</button>
                         <h3 class="text-base font-extrabold text-white">Yeni Gün ve Saat Seç</h3>
 
-                        <!-- 3 Gün Seçimi -->
                         <div class="space-y-1.5">
                             <span class="text-[11px] text-brandGold font-bold">Gün Seçin</span>
                             <div class="grid grid-cols-3 gap-2">
@@ -685,7 +782,6 @@
                             </div>
                         </div>
 
-                        <!-- Saat Aralığı Slider -->
                         <div class="bg-brandNavy/80 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-gray-300 font-semibold">Saat Aralığı</span>
@@ -719,7 +815,6 @@
             renderReschedule();
         }
 
-        // --- KARARI UYGULA ---
         function applyDecision(type) {
             appState.decisionType = type;
             document.getElementById("tab-dot").classList.add("hidden");
@@ -756,7 +851,6 @@
             renderTicket();
         }
 
-        // --- TESLİMAT KARTI (PIN / QR) ---
         function renderTicket() {
             setActiveTab("dashboard");
             document.getElementById("screen").innerHTML = `
@@ -773,8 +867,8 @@
 
                     <div class="bg-brandNavy/90 border border-brandGold/40 rounded-2xl p-4 space-y-3">
                         <div class="flex justify-between items-center text-[11px] border-b border-white/10 pb-2">
-                            <span class="text-gray-400">Gönderi No</span>
-                            <span class="font-mono font-bold text-white">#SD-84920</span>
+                            <span class="text-gray-400">${appState.activeCarrier}</span>
+                            <span class="font-mono font-bold text-white">#${appState.activeTrackingCode}</span>
                         </div>
                         <div class="flex items-center justify-around py-1">
                             <div>
@@ -816,11 +910,15 @@
                 selectedDropSpot: "security",
                 mergedSecondCargo: false,
                 decisionType: null,
+                activeTrackingCode: "SD-84920",
+                activeCarrier: "Yurtiçi Kargo",
+                activeStore: "Trendyol Teknoloji",
                 deliverySummary: "Yarın • 14:00 - 17:00",
                 deliveryBadge: "Saat Seçimi Bekliyor",
                 deliveryBadgeClass: "bg-brandGold/20 text-brandGold border-brandGold/40",
                 pinCode: "4829",
-                pushShown: false
+                pushShown: false,
+                manualCargos: []
             };
             dismissPush();
             document.getElementById("tab-dot").classList.add("hidden");
