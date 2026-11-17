@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartDrop - İnteraktif Uygulama Deneyimi</title>
+    <title>SmartDrop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,21 +36,44 @@
             -webkit-text-fill-color: transparent;
         }
         .phone-shell {
-            box-shadow: 0 35px 90px -15px rgba(0, 0, 0, 0.95), 0 0 45px rgba(212, 175, 55, 0.16);
+            box-shadow: 0 35px 90px -15px rgba(0, 0, 0, 0.95), 0 0 40px rgba(212, 175, 55, 0.14);
         }
         .slide-in {
-            animation: slideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(14px); }
+            from { opacity: 0; transform: translateX(12px); }
             to { opacity: 1; transform: translateX(0); }
         }
         .push-drop {
-            animation: pushDrop 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: pushDrop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes pushDrop {
             from { opacity: 0; transform: translateY(-120%); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        /* Özel Zaman Aralığı Slider Stili */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #D4AF37;
+            border: 3px solid #041229;
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
         }
         .phone-scroll::-webkit-scrollbar { width: 3px; }
         .phone-scroll::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.35); border-radius: 4px; }
@@ -59,124 +82,76 @@
 <body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-brandGold selection:text-brandNavyDark">
 
     <!-- Arka Plan Işımaları -->
-    <div class="fixed top-10 left-1/4 w-[450px] h-[450px] bg-brandNavy rounded-full blur-[140px] opacity-60 pointer-events-none"></div>
-    <div class="fixed bottom-10 right-1/4 w-[380px] h-[380px] bg-brandGold/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="fixed top-10 left-1/3 w-[420px] h-[420px] bg-brandNavy rounded-full blur-[140px] opacity-60 pointer-events-none"></div>
 
-    <!-- Üst Navigasyon -->
+    <!-- Sade Üst Bar -->
     <header class="border-b border-white/10 bg-brandNavyDark/90 backdrop-blur-md sticky top-0 z-40">
-        <div class="container mx-auto px-5 py-3.5 flex justify-between items-center">
-            <a href="../" class="flex items-center gap-2.5">
+        <div class="container mx-auto px-5 py-3 flex justify-between items-center">
+            <a href="../" class="flex items-center gap-2">
                 <img src="../logo.png" alt="SmartDrop" class="h-7 w-auto object-contain" onerror="this.style.display='none'">
-                <span class="text-xl font-extrabold tracking-tight">
+                <span class="text-lg font-extrabold tracking-tight">
                     <span class="text-white">Smart</span><span class="gold-gradient-text">Drop</span>
                 </span>
             </a>
-
-            <div class="flex items-center gap-2.5">
-                <button onclick="toggleJuryDrawer()" id="jury-toggle-btn" class="text-xs bg-brandNavy border border-brandGold/30 hover:border-brandGold text-brandGold px-3.5 py-2 rounded-xl font-semibold transition-all flex items-center gap-1.5">
-                    <i class="fas fa-sliders-h"></i>
-                    <span class="hidden sm:inline">Jüri / API Paneli</span>
+            <div class="flex items-center gap-3">
+                <button onclick="resetApp()" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 border border-white/15 px-3 py-1.5 rounded-xl font-semibold transition-all">
+                    <i class="fas fa-redo-alt mr-1"></i> Sıfırla
                 </button>
-                <button onclick="resetApp()" class="text-xs bg-white/5 hover:bg-white/10 text-gray-200 border border-white/15 px-3.5 py-2 rounded-xl font-semibold transition-all">
-                    <i class="fas fa-redo-alt sm:mr-1"></i><span class="hidden sm:inline">Sıfırla</span>
-                </button>
-                <a href="../" class="text-xs text-gray-400 hover:text-white px-2 py-1.5 transition-colors">
-                    <i class="fas fa-times text-sm"></i>
+                <a href="../" class="text-xs text-gray-400 hover:text-white px-2 py-1">
+                    Ana Sayfa
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Ana Uygulama Sahnesi -->
-    <main class="container mx-auto px-4 py-6 flex-1 flex flex-col lg:flex-row items-center justify-center gap-8 relative z-10">
+    <!-- Tek Odaklı Mobil Uygulama Sahnesi -->
+    <main class="container mx-auto px-4 py-5 flex-1 flex items-center justify-center relative z-10">
+        <div class="phone-shell w-[365px] sm:w-[390px] h-[750px] bg-[#041229] rounded-[3rem] border-[8px] border-[#15294B] flex flex-col justify-between overflow-hidden relative">
+            
+            <!-- Kayan Bildirim Alanı -->
+            <div id="push-banner-container" class="absolute top-11 left-3 right-3 z-50 pointer-events-none"></div>
 
-        <!-- TELEFON ÇERÇEVESİ -->
-        <div class="flex flex-col items-center">
-            <div class="phone-shell w-[365px] sm:w-[385px] h-[730px] bg-[#041229] rounded-[3rem] border-[8px] border-[#15294B] flex flex-col justify-between overflow-hidden relative">
-                
-                <!-- Kayan Push Bildirimi Alanı -->
-                <div id="push-banner-container" class="absolute top-11 left-3 right-3 z-50 pointer-events-none"></div>
-
-                <!-- Üst Durum Çubuğu -->
-                <div class="bg-[#071936] pt-2 pb-2.5 px-6 border-b border-white/10 shrink-0 z-30">
-                    <div class="w-24 h-3.5 bg-[#15294B] rounded-b-xl mx-auto -mt-2 mb-2"></div>
-                    <div class="flex justify-between items-center text-[11px]">
-                        <span id="clock-display" class="font-bold text-white">09:41</span>
-                        <span class="font-extrabold text-xs tracking-wide">
-                            <span class="text-white">Smart</span><span class="text-brandGold">Drop</span>
-                        </span>
-                        <div class="flex items-center gap-1.5 text-gray-300">
-                            <i class="fas fa-signal text-[10px]"></i>
-                            <i class="fas fa-wifi text-[10px]"></i>
-                            <i class="fas fa-battery-full text-emerald-400"></i>
-                        </div>
+            <!-- Üst Durum Çubuğu -->
+            <div class="bg-[#071936] pt-2 pb-2.5 px-6 border-b border-white/10 shrink-0 z-30">
+                <div class="w-24 h-3.5 bg-[#15294B] rounded-b-xl mx-auto -mt-2 mb-2"></div>
+                <div class="flex justify-between items-center text-[11px]">
+                    <span class="font-bold text-white">09:41</span>
+                    <span class="font-extrabold text-xs tracking-wide">
+                        <span class="text-white">Smart</span><span class="text-brandGold">Drop</span>
+                    </span>
+                    <div class="flex items-center gap-1.5 text-gray-300">
+                        <i class="fas fa-signal text-[10px]"></i>
+                        <i class="fas fa-wifi text-[10px]"></i>
+                        <i class="fas fa-battery-full text-emerald-400"></i>
                     </div>
                 </div>
-
-                <!-- Dinamik Ekran İçeriği -->
-                <div id="screen" class="flex-1 p-5 overflow-y-auto phone-scroll flex flex-col justify-between relative"></div>
-
-                <!-- Alt Tab Bar -->
-                <div class="bg-[#071936] border-t border-white/10 px-6 py-2.5 flex justify-around text-[10px] text-gray-400 shrink-0 z-30">
-                    <button onclick="navTo('dashboard')" id="tab-dashboard" class="flex flex-col items-center gap-1 transition-colors">
-                        <i class="fas fa-box text-sm"></i>
-                        <span>Kargolarım</span>
-                    </button>
-                    <button onclick="navTo('options')" id="tab-options" class="flex flex-col items-center gap-1 transition-colors relative">
-                        <i class="fas fa-sliders-h text-sm"></i>
-                        <span>Teslimat Ayarı</span>
-                        <span id="tab-dot" class="hidden absolute -top-0.5 right-2 w-2 h-2 rounded-full bg-brandGold animate-ping"></span>
-                    </button>
-                    <button onclick="navTo('connect')" id="tab-connect" class="flex flex-col items-center gap-1 transition-colors">
-                        <i class="fas fa-user-shield text-sm"></i>
-                        <span>Hesabım</span>
-                    </button>
-                </div>
-
             </div>
+
+            <!-- Dinamik Uygulama Ekranı -->
+            <div id="screen" class="flex-1 p-5 overflow-y-auto phone-scroll flex flex-col justify-between relative"></div>
+
+            <!-- Alt Tab Bar -->
+            <div class="bg-[#071936] border-t border-white/10 px-6 py-2.5 flex justify-around text-[10px] text-gray-400 shrink-0 z-30">
+                <button onclick="navTo('dashboard')" id="tab-dashboard" class="flex flex-col items-center gap-1 transition-colors">
+                    <i class="fas fa-box text-sm"></i>
+                    <span>Kargolarım</span>
+                </button>
+                <button onclick="navTo('options')" id="tab-options" class="flex flex-col items-center gap-1 transition-colors relative">
+                    <i class="fas fa-clock text-sm"></i>
+                    <span>Teslimat Ayarı</span>
+                    <span id="tab-dot" class="hidden absolute -top-0.5 right-2 w-2 h-2 rounded-full bg-brandGold animate-ping"></span>
+                </button>
+                <button onclick="navTo('connect')" id="tab-connect" class="flex flex-col items-center gap-1 transition-colors">
+                    <i class="fas fa-user text-sm"></i>
+                    <span>Hesabım</span>
+                </button>
+            </div>
+
         </div>
-
-        <!-- OPSİYONEL JÜRİ / YATIRIMCI API ÇEKMECESİ (Varsayılan Kapalı) -->
-        <aside id="jury-drawer" class="hidden w-full max-w-sm bg-brandNavy/60 border border-brandGold/30 rounded-3xl p-6 backdrop-blur-xl space-y-5 slide-in">
-            <div class="flex justify-between items-center border-b border-white/10 pb-3">
-                <div>
-                    <span class="text-[10px] uppercase tracking-widest text-brandGold font-bold">Arka Plan Mimarisi</span>
-                    <h3 class="text-base font-extrabold text-white">Canlı Rota & API Akışı</h3>
-                </div>
-                <button onclick="toggleJuryDrawer()" class="text-gray-400 hover:text-white text-xs"><i class="fas fa-times"></i></button>
-            </div>
-
-            <div class="space-y-2.5 text-xs">
-                <div class="p-3 rounded-xl bg-brandNavyDark/80 border border-white/10 flex justify-between items-center">
-                    <span class="text-gray-400">Entegrasyon Durumu</span>
-                    <span id="jury-sync" class="font-bold text-amber-400">Bekleniyor</span>
-                </div>
-                <div class="p-3 rounded-xl bg-brandNavyDark/80 border border-white/10 flex justify-between items-center">
-                    <span class="text-gray-400">İletişim Kademesi</span>
-                    <span id="jury-channel" class="font-bold text-white">1. App Push</span>
-                </div>
-                <div class="p-3 rounded-xl bg-brandNavyDark/80 border border-white/10 flex justify-between items-center">
-                    <span class="text-gray-400">Alıcı Kararı</span>
-                    <span id="jury-decision" class="font-bold text-brandGold">Henüz Seçilmedi</span>
-                </div>
-                <div class="p-3 rounded-xl bg-brandNavyDark/80 border border-white/10 flex justify-between items-center">
-                    <span class="text-gray-400">08:00 SAP/Oracle API</span>
-                    <span id="jury-api" class="font-bold text-gray-400">Beklemede</span>
-                </div>
-            </div>
-
-            <div class="bg-[#030D1F] border border-white/10 rounded-2xl p-3.5">
-                <span class="text-[10px] text-brandGold font-bold uppercase block mb-2">Sistem Günlüğü</span>
-                <div id="api-log-list" class="space-y-1.5 text-[11px] font-mono text-gray-300 max-h-36 overflow-y-auto phone-scroll">
-                    <div>[Sistem] Oturum başlatıldı.</div>
-                </div>
-            </div>
-        </aside>
-
     </main>
 
     <script>
-        // --- DİNAMİK GERÇEK TARİH HESAPLAMA ---
+        // --- DİNAMİK TAKVİM (Önümüzdeki 3 Gün) ---
         function getUpcomingDays() {
             const daysTr = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
             const monthsTr = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
@@ -194,66 +169,56 @@
         }
 
         const upcomingDays = getUpcomingDays();
-        const timeSlots = ["10:00 - 12:00", "12:00 - 14:00", "14:00 - 16:00", "16:00 - 18:00"];
         const lockers = [
             { name: "Metro Çıkışı SmartDrop Otomatı", dist: "150m", code: "OTM-12" },
             { name: "Nilüfer Meydan 7/24 Kargo Noktası", dist: "320m", code: "OTM-04" }
         ];
+        const dropSpots = [
+            { id: "security", label: "Site Güvenliği / Danışma", icon: "fa-shield-alt" },
+            { id: "door", label: "Daire Kapısı Önü (Temassız)", icon: "fa-door-closed" },
+            { id: "apt", label: "Apartman Görevlisi", icon: "fa-user-tie" }
+        ];
 
-        // --- UYGULAMA DURUMU (STATE) ---
+        // 09:00 (540 dk) - 20:00 (1200 dk) arası yarım saatlik formatlayıcı
+        function formatMinutes(mins) {
+            const h = Math.floor(mins / 60).toString().padStart(2, "0");
+            const m = (mins % 60).toString().padStart(2, "0");
+            return `${h}:${m}`;
+        }
+
+        // --- UYGULAMA DURUMU ---
         let appState = {
             connected: false,
             phone: "+90 532 480 26 16",
-            channel: "App Push",
-            selectedSlot: "14:00 - 16:00",
+            channel: "Push",
+            startMins: 840, // 14:00
+            endMins: 1020,  // 17:00
             selectedDayIndex: 0,
-            rescheduleSlot: "14:00 - 16:00",
+            resStartMins: 960, // 16:00
+            resEndMins: 1140,  // 19:00
             selectedLockerIndex: 0,
-            decisionType: null, // 'tomorrow', 'neighbor', 'locker', 'reschedule'
-            deliverySummary: "Yarın • 14:00 - 16:00",
-            deliveryBadge: "Teyit Bekliyor",
+            selectedDropSpot: "security",
+            mergedSecondCargo: false,
+            decisionType: null,
+            deliverySummary: "Yarın • 14:00 - 17:00",
+            deliveryBadge: "Saat Seçimi Bekliyor",
             deliveryBadgeClass: "bg-brandGold/20 text-brandGold border-brandGold/40",
             pinCode: "4829",
             pushShown: false
         };
 
-        // --- YARDIMCI FONKSİYONLAR ---
-        function logEvent(text, juryUpdates = {}) {
-            const logBox = document.getElementById("api-log-list");
-            const time = new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
-            const item = document.createElement("div");
-            item.textContent = `[${time}] ${text}`;
-            logBox.prepend(item);
-
-            if (juryUpdates.sync) document.getElementById("jury-sync").textContent = juryUpdates.sync;
-            if (juryUpdates.channel) document.getElementById("jury-channel").textContent = juryUpdates.channel;
-            if (juryUpdates.decision) document.getElementById("jury-decision").textContent = juryUpdates.decision;
-            if (juryUpdates.api) {
-                const apiEl = document.getElementById("jury-api");
-                apiEl.textContent = juryUpdates.api;
-                apiEl.className = "font-bold text-emerald-400";
-            }
-        }
-
-        function toggleJuryDrawer() {
-            const drawer = document.getElementById("jury-drawer");
-            drawer.classList.toggle("hidden");
-        }
-
         function setActiveTab(tabName) {
             ["dashboard", "options", "connect"].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
-                if (t === tabName) {
-                    el.className = "flex flex-col items-center gap-1 text-brandGold font-bold transition-colors relative";
-                } else {
-                    el.className = "flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors relative";
-                }
+                el.className = t === tabName
+                    ? "flex flex-col items-center gap-1 text-brandGold font-bold transition-colors relative"
+                    : "flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors relative";
             });
         }
 
         function navTo(target) {
             if (!appState.connected && target !== "connect") {
-                showToast("Önce telefon numaranızı bağlayın");
+                showToast("Devam etmek için numaranızı doğrulayın");
                 renderConnect();
                 return;
             }
@@ -274,10 +239,10 @@
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] font-extrabold text-brandGold uppercase">SmartDrop • Şimdi</span>
-                            <span class="text-[10px] text-gray-400">Dokun</span>
+                            <span class="text-[10px] text-gray-400">Aç</span>
                         </div>
-                        <p class="text-xs font-bold text-white mt-0.5">Yarın kargonuz dağıtıma çıkıyor</p>
-                        <p class="text-[11px] text-gray-300">2 saatlik teslimat aralığınızı seçmek için dokunun.</p>
+                        <p class="text-xs font-bold text-white mt-0.5">Yarın 2 kargonuz dağıtıma çıkıyor</p>
+                        <p class="text-[11px] text-gray-300">09:00 - 20:00 arası uygun saatinizi seçin.</p>
                     </div>
                 </div>
             `;
@@ -299,24 +264,24 @@
             setTimeout(() => { container.innerHTML = ""; }, 2200);
         }
 
-        // --- EKRAN 1: TELEFON BAĞLAMA & OTP DOĞRULAMA ---
+        // --- 1. EKRAN: NUMARA BAĞLAMA ---
         function renderConnect() {
             setActiveTab("connect");
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
-                    <div class="text-center mt-5">
-                        <div class="w-16 h-16 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-2xl mx-auto mb-4 shadow-lg">
+                    <div class="text-center mt-6">
+                        <div class="w-16 h-16 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-2xl mx-auto mb-4">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h3 class="text-xl font-extrabold text-white">Tek Numara ile Bağlan</h3>
+                        <h3 class="text-xl font-extrabold text-white">Kargolarını Tek Yerde Gör</h3>
                         <p class="text-xs text-gray-400 mt-1.5 px-2">
-                            Kargo kodu girmeden tüm gönderilerinizi otomatik çekin.
+                            Takip kodu girmeden tüm kargolarını otomatik listele.
                         </p>
                     </div>
 
                     <div class="space-y-3 my-4">
                         <div class="bg-brandNavy/80 border border-brandGold/30 rounded-2xl p-4 space-y-2">
-                            <label class="text-[11px] text-gray-400 font-semibold">Cep Telefonu Numaranız</label>
+                            <label class="text-[11px] text-gray-400 font-semibold">Cep Telefonu Numaran</label>
                             <div class="flex items-center bg-brandNavyDark border border-brandGold/40 rounded-xl px-3.5 py-3">
                                 <i class="fas fa-phone text-brandGold mr-2.5 text-sm"></i>
                                 <input id="phone-input" type="text" value="${appState.phone}" class="bg-transparent text-white font-bold text-sm w-full focus:outline-none">
@@ -331,8 +296,8 @@
                         </div>
                     </div>
 
-                    <button onclick="startOtpVerification()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-sm shadow-xl hover:opacity-95 active:scale-95 transition-all">
-                        Doğrulama Kodu Gönder <i class="fas fa-arrow-right ml-1.5"></i>
+                    <button onclick="startOtpVerification()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-sm shadow-xl active:scale-95 transition-all">
+                        Devam Et <i class="fas fa-arrow-right ml-1.5"></i>
                     </button>
                 </div>
             `;
@@ -341,16 +306,15 @@
         function startOtpVerification() {
             const val = document.getElementById("phone-input");
             if (val) appState.phone = val.value;
-            logEvent(`SMS doğrulama kodu gönderildi: ${appState.phone}`);
 
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full text-center">
-                    <div class="mt-8 space-y-3">
+                    <div class="mt-8 space-y-2">
                         <div class="w-14 h-14 rounded-2xl bg-brandGold/15 text-brandGold flex items-center justify-center text-xl mx-auto">
                             <i class="fas fa-sms"></i>
                         </div>
-                        <h3 class="text-lg font-extrabold text-white">SMS Onay Kodu</h3>
-                        <p class="text-xs text-gray-400">${appState.phone} numarasına gelen 4 haneli kod</p>
+                        <h3 class="text-lg font-extrabold text-white">Doğrulama Kodu</h3>
+                        <p class="text-xs text-gray-400">${appState.phone} numarasına gönderildi</p>
                     </div>
 
                     <div class="flex justify-center gap-3 my-6">
@@ -360,45 +324,43 @@
                         <div id="otp-4" class="w-12 h-14 rounded-xl bg-brandNavyDark border border-brandGold/50 flex items-center justify-center text-xl font-extrabold text-brandGold">•</div>
                     </div>
 
-                    <p class="text-xs text-emerald-400 font-semibold animate-pulse">Kod otomatik algılanıyor...</p>
+                    <p class="text-xs text-gray-400">Kargoların taranıyor...</p>
                 </div>
             `;
 
-            const digits = ["7", "4", "9", "2"];
-            digits.forEach((d, idx) => {
+            ["7", "4", "9", "2"].forEach((d, idx) => {
                 setTimeout(() => {
                     const box = document.getElementById(`otp-${idx + 1}`);
                     if (box) box.textContent = d;
-                }, 250 * (idx + 1));
+                }, 220 * (idx + 1));
             });
 
             setTimeout(() => {
                 appState.connected = true;
                 document.getElementById("tab-dot").classList.remove("hidden");
-                logEvent("Numara doğrulandı. 3 kargo tek panelde birleştirildi.", { sync: "Aktif (3 Gönderi)" });
                 renderDashboard();
-                setTimeout(showPushNotification, 500);
-            }, 1350);
+                setTimeout(showPushNotification, 450);
+            }, 1250);
         }
 
-        // --- EKRAN 2: TEK PANEL KONSOLİDE DASHBOARD ---
+        // --- 2. EKRAN: KARGOLARIM ---
         function renderDashboard() {
             setActiveTab("dashboard");
             const isConfirmed = appState.decisionType !== null;
 
             document.getElementById("screen").innerHTML = `
-                <div class="slide-in space-y-4">
+                <div class="slide-in space-y-3.5">
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="text-[10px] text-gray-400 block">${appState.phone}</span>
-                            <h3 class="text-lg font-extrabold text-white">Kargolarım (3)</h3>
+                            <h3 class="text-lg font-extrabold text-white">Kargolarım</h3>
                         </div>
-                        <span class="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-bold">
-                            <i class="fas fa-sync-alt mr-1"></i>Canlı
-                        </span>
+                        <button onclick="showToast('Tüm kargolar güncel')" class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-brandGold flex items-center justify-center text-xs">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
                     </div>
 
-                    <!-- ANA AKTİF KARGO KARTI (#SD-84920) -->
+                    <!-- AKTİF KARGO KARTI (#SD-84920) -->
                     <div class="bg-gradient-to-br from-brandNavy to-[#071E42] border ${isConfirmed ? 'border-emerald-500/50' : 'border-brandGold'} rounded-2xl p-4 shadow-xl space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
@@ -413,7 +375,7 @@
                             </span>
                         </div>
 
-                        <div class="bg-brandNavyDark/70 rounded-xl p-2.5 flex items-center justify-between text-xs border border-white/5">
+                        <div class="bg-brandNavyDark/75 rounded-xl p-2.5 flex items-center justify-between text-xs border border-white/5">
                             <span class="text-gray-300 flex items-center gap-1.5">
                                 <i class="fas fa-clock text-brandGold"></i>
                                 <strong class="text-white">${appState.deliverySummary}</strong>
@@ -421,84 +383,149 @@
                             ${isConfirmed ? `<button onclick="renderTicket()" class="text-[11px] text-brandGold font-bold underline">PIN / QR</button>` : ''}
                         </div>
 
-                        <button onclick="renderOptions()" class="w-full py-2.5 rounded-xl ${isConfirmed ? 'bg-white/10 text-white hover:bg-white/15' : 'bg-brandGold text-brandNavyDark font-extrabold'} text-xs font-bold transition-all flex items-center justify-center gap-1.5">
-                            ${isConfirmed ? '<i class="fas fa-edit"></i> Teslimat Tercihini Düzenle' : 'Teslimat Saatini Seç / Yönet <i class="fas fa-arrow-right"></i>'}
+                        ${isConfirmed ? `
+                            <!-- Canlı Kurye Yaklaşım Bilgisi -->
+                            <div class="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-2.5 flex items-center justify-between text-[11px]">
+                                <span class="text-emerald-300 flex items-center gap-1.5 font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                    Kurye 3 durak uzakta (~15 dk)
+                                </span>
+                                <button onclick="renderDropSpot()" class="text-white underline font-bold">Son Dakika</button>
+                            </div>
+                        ` : ''}
+
+                        <button onclick="renderOptions()" class="w-full py-2.5 rounded-xl ${isConfirmed ? 'bg-white/10 text-white hover:bg-white/15' : 'bg-brandGold text-brandNavyDark font-extrabold'} text-xs font-bold transition-all">
+                            ${isConfirmed ? 'Teslimat Tercihini Değiştir' : 'Teslimat Saatini Seç / Yönet'}
                         </button>
                     </div>
 
-                    <!-- DİĞER KARGOLAR -->
-                    <div class="space-y-2">
-                        <span class="text-[11px] text-gray-400 font-semibold block">Diğer Gönderiler</span>
-                        
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex justify-between items-center">
+                    <!-- İKİNCİ KARGO (BİRLEŞTİRİLEBİLİR) -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
+                        <div class="flex justify-between items-center">
                             <div>
                                 <div class="text-xs font-bold text-white">Aras Kargo <span class="text-[10px] text-gray-400 font-normal">#SD-51204</span></div>
-                                <div class="text-[11px] text-gray-400 mt-0.5">Amazon Türkiye • Transfer Merkezinde</div>
+                                <div class="text-[11px] text-gray-400 mt-0.5">Amazon Türkiye • Yarın Dağıtımda</div>
                             </div>
-                            <span class="text-[10px] bg-sky-500/15 text-sky-300 border border-sky-500/30 px-2.5 py-1 rounded-full font-bold">Yolda</span>
+                            <span class="text-[10px] ${appState.mergedSecondCargo ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-sky-500/15 text-sky-300 border-sky-500/30'} border px-2.5 py-1 rounded-full font-bold">
+                                ${appState.mergedSecondCargo ? 'Birleştirildi' : 'Dağıtımda'}
+                            </span>
                         </div>
 
-                        <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex justify-between items-center">
-                            <div>
-                                <div class="text-xs font-bold text-white">MNG Kargo <span class="text-[10px] text-gray-400 font-normal">#SD-30918</span></div>
-                                <div class="text-[11px] text-gray-400 mt-0.5">Hepsiburada • Teslim Edildi</div>
+                        ${!appState.mergedSecondCargo ? `
+                            <button onclick="mergeCargos()" class="w-full py-2 rounded-xl bg-brandGold/15 hover:bg-brandGold/25 border border-brandGold/30 text-[11px] text-brandGold font-bold transition-all">
+                                <i class="fas fa-link mr-1"></i> Yarınki Diğer Kargomla Birleştir
+                            </button>
+                        ` : `
+                            <div class="text-[11px] text-emerald-300 bg-emerald-500/10 rounded-lg px-2.5 py-1.5">
+                                <i class="fas fa-check mr-1"></i> ${appState.deliverySummary} ile aynı saatte gelecek
                             </div>
-                            <span class="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-bold">Teslim</span>
+                        `}
+                    </div>
+
+                    <!-- TESLİM EDİLEN KARGO -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5 flex justify-between items-center opacity-75">
+                        <div>
+                            <div class="text-xs font-bold text-white">MNG Kargo <span class="text-[10px] text-gray-400 font-normal">#SD-30918</span></div>
+                            <div class="text-[11px] text-gray-400 mt-0.5">Hepsiburada • Teslim Edildi</div>
                         </div>
+                        <span class="text-[10px] bg-white/10 text-gray-300 px-2.5 py-1 rounded-full font-bold">Teslim</span>
                     </div>
                 </div>
             `;
         }
 
-        // --- EKRAN 3: TESLİMAT SAATİ SEÇİMİ & ALTERNATİFLER ---
+        function mergeCargos() {
+            appState.mergedSecondCargo = true;
+            showToast("2 kargo aynı zaman diliminde birleştirildi");
+            renderDashboard();
+        }
+
+        // --- 3. EKRAN: 09:00 - 20:00 SERBEST SAAT ARALIĞI & ALTERNATİFLER ---
         function renderOptions() {
             dismissPush();
             setActiveTab("options");
 
+            const rangeText = `${formatMinutes(appState.startMins)} - ${formatMinutes(appState.endMins)}`;
+            const durationHours = ((appState.endMins - appState.startMins) / 60).toFixed(1).replace(".0", "");
+
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in space-y-3.5">
-                    <!-- Üst Geri & İletişim Kanalı -->
+                    <!-- Üst Geri & Bildirim Kanalı -->
                     <div class="flex justify-between items-center">
                         <button onclick="renderDashboard()" class="text-xs text-gray-400 hover:text-white flex items-center gap-1">
                             <i class="fas fa-arrow-left"></i> Geri
                         </button>
                         <div class="flex gap-1 bg-white/5 p-1 rounded-lg text-[10px]">
-                            <button onclick="switchChannel('App Push')" class="px-2 py-0.5 rounded ${appState.channel==='App Push'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">Push</button>
-                            <button onclick="switchChannel('Akıllı SMS')" class="px-2 py-0.5 rounded ${appState.channel==='Akıllı SMS'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">SMS</button>
-                            <button onclick="switchChannel('Sesli Arama')" class="px-2 py-0.5 rounded ${appState.channel==='Sesli Arama'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">IVR</button>
+                            <button onclick="appState.channel='Push'; renderOptions()" class="px-2 py-0.5 rounded ${appState.channel==='Push'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">Push</button>
+                            <button onclick="appState.channel='SMS'; renderOptions()" class="px-2 py-0.5 rounded ${appState.channel==='SMS'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">SMS</button>
+                            <button onclick="appState.channel='Arama'; renderOptions()" class="px-2 py-0.5 rounded ${appState.channel==='Arama'?'bg-brandGold text-brandNavyDark font-bold':'text-gray-400'}">Arama</button>
                         </div>
                     </div>
 
-                    <!-- YARIN İÇİN 2 SAATLİK ARALIK SEÇİMİ -->
-                    <div class="bg-brandNavy/90 border border-brandGold/40 rounded-2xl p-3.5 space-y-2.5">
+                    <!-- SERBEST ZAMAN ARALIĞI SEÇİCİ (09:00 - 20:00) -->
+                    <div class="bg-brandNavy/90 border border-brandGold/40 rounded-2xl p-4 space-y-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold text-white"><i class="fas fa-clock text-brandGold mr-1.5"></i>Yarın Teslimat Aralığı</span>
-                            <span class="text-[10px] text-emerald-400 font-semibold">2 Saatlik Pencere</span>
+                            <span class="text-xs font-extrabold text-white">Yarın Uygun Olduğun Saatler</span>
+                            <span class="text-[10px] bg-brandGold/20 text-brandGold px-2 py-0.5 rounded font-bold">${durationHours} Saatlik Aralık</span>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2">
-                            ${timeSlots.map(slot => `
-                                <button onclick="appState.selectedSlot='${slot}'; renderOptions()" class="py-2.5 px-2 rounded-xl text-[11px] font-bold border transition-all ${appState.selectedSlot === slot ? 'bg-brandGold text-brandNavyDark border-brandGold shadow-md' : 'bg-brandNavyDark/80 text-gray-300 border-white/10 hover:border-brandGold/40'}">
-                                    ${slot}
-                                </button>
-                            `).join("")}
+                        <!-- Seçilen Saat Göstergesi -->
+                        <div class="bg-brandNavyDark border border-white/10 rounded-xl py-2.5 px-4 flex items-center justify-between">
+                            <div class="text-center">
+                                <span class="text-[10px] text-gray-400 block">Başlangıç</span>
+                                <span id="start-label" class="text-base font-extrabold text-brandGold">${formatMinutes(appState.startMins)}</span>
+                            </div>
+                            <i class="fas fa-arrow-right text-gray-500 text-xs"></i>
+                            <div class="text-center">
+                                <span class="text-[10px] text-gray-400 block">Bitiş</span>
+                                <span id="end-label" class="text-base font-extrabold text-brandGold">${formatMinutes(appState.endMins)}</span>
+                            </div>
                         </div>
 
-                        <button onclick="applyDecision('tomorrow')" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-brandNavyDark font-extrabold text-xs transition-all shadow-lg">
-                            Yarın ${appState.selectedSlot} Onayla
+                        <!-- Kaydırıcılar (09:00 = 540 dk, 20:00 = 1200 dk) -->
+                        <div class="space-y-2 pt-1">
+                            <div>
+                                <div class="flex justify-between text-[10px] text-gray-400 mb-0.5">
+                                    <span>Başlangıç Saati</span>
+                                    <span>09:00 - 19:00</span>
+                                </div>
+                                <input type="range" min="540" max="1140" step="30" value="${appState.startMins}" oninput="updateTimeRange('start', this.value)" class="w-full">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-[10px] text-gray-400 mb-0.5">
+                                    <span>Bitiş Saati</span>
+                                    <span>10:00 - 20:00</span>
+                                </div>
+                                <input type="range" min="600" max="1200" step="30" value="${appState.endMins}" oninput="updateTimeRange('end', this.value)" class="w-full">
+                            </div>
+                        </div>
+
+                        <button id="confirm-range-btn" onclick="applyDecision('tomorrow')" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-brandNavyDark font-extrabold text-xs transition-all shadow-lg">
+                            Yarın ${rangeText} Onayla
                         </button>
                     </div>
 
                     <!-- EVDE DEĞİLSENİZ ALTERNATİFLER -->
                     <div class="space-y-2">
-                        <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold block">Evde Değilseniz Alternatifler</span>
+                        <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold block">Evde Değilsen Diğer Seçenekler</span>
+
+                        <button onclick="renderDropSpot()" class="w-full p-3 rounded-xl bg-white/5 hover:border-brandGold/50 border border-white/10 flex justify-between items-center text-left transition-all">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fas fa-door-open text-emerald-400 text-sm"></i>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Güvenli Noktaya / Kapıya Bırak</div>
+                                    <div class="text-[10px] text-gray-400">Site güvenliği, kapı önü veya görevli</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-500 text-xs"></i>
+                        </button>
 
                         <button onclick="renderNeighbor()" class="w-full p-3 rounded-xl bg-white/5 hover:border-brandGold/50 border border-white/10 flex justify-between items-center text-left transition-all">
                             <div class="flex items-center gap-2.5">
                                 <i class="fas fa-user-friends text-amber-400 text-sm"></i>
                                 <div>
                                     <div class="text-xs font-bold text-white">Komşuya Bırak</div>
-                                    <div class="text-[10px] text-gray-400">Güvenilir komşu veya bina görevlisi</div>
+                                    <div class="text-[10px] text-gray-400">Komşuna PIN kodu ile teslim et</div>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-gray-500 text-xs"></i>
@@ -509,7 +536,7 @@
                                 <i class="fas fa-box text-purple-400 text-sm"></i>
                                 <div>
                                     <div class="text-xs font-bold text-white">Kargo Otomatına Yönlendir</div>
-                                    <div class="text-[10px] text-gray-400">7/24 QR kod ile teslim alım</div>
+                                    <div class="text-[10px] text-gray-400">7/24 QR kod ile teslim al</div>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-gray-500 text-xs"></i>
@@ -519,8 +546,8 @@
                             <div class="flex items-center gap-2.5">
                                 <i class="fas fa-calendar-alt text-sky-400 text-sm"></i>
                                 <div>
-                                    <div class="text-xs font-bold text-white">Tarihi Ertele (3 Gün İçinde)</div>
-                                    <div class="text-[10px] text-gray-400">İstediğiniz gün ve saat aralığını seçin</div>
+                                    <div class="text-xs font-bold text-white">Başka Güne Ertele (3 Gün İçinde)</div>
+                                    <div class="text-[10px] text-gray-400">İstediğin gün ve saat aralığını seç</div>
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-brandGold text-xs"></i>
@@ -530,31 +557,71 @@
             `;
         }
 
-        function switchChannel(ch) {
-            appState.channel = ch;
-            logEvent(`İletişim kanalı değiştirildi: ${ch}`, { channel: ch });
+        function updateTimeRange(which, val) {
+            val = parseInt(val, 10);
+            if (which === "start") {
+                appState.startMins = val;
+                if (appState.endMins <= appState.startMins + 30) {
+                    appState.endMins = Math.min(1200, appState.startMins + 60);
+                }
+            } else {
+                appState.endMins = val;
+                if (appState.startMins >= appState.endMins - 30) {
+                    appState.startMins = Math.max(540, appState.endMins - 60);
+                }
+            }
             renderOptions();
         }
 
-        // --- ALT EKRAN: KOMŞU SEÇİMİ ---
+        // --- TEMASSIZ GÜVENLİ NOKTA SEÇİMİ ---
+        function renderDropSpot() {
+            document.getElementById("screen").innerHTML = `
+                <div class="slide-in flex flex-col justify-between h-full">
+                    <div class="space-y-4">
+                        <button onclick="renderOptions()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i>Geri</button>
+                        <div>
+                            <h3 class="text-base font-extrabold text-white">Nereye Bırakılsın?</h3>
+                            <p class="text-[11px] text-gray-400">Kurye teslim ettiğinde fotoğraf kanıtı gönderilir.</p>
+                        </div>
+
+                        <div class="space-y-2.5">
+                            ${dropSpots.map(s => `
+                                <button onclick="appState.selectedDropSpot='${s.id}'; renderDropSpot()" class="w-full p-3.5 rounded-2xl border flex items-center justify-between transition-all ${appState.selectedDropSpot === s.id ? 'bg-brandNavy border-brandGold text-white font-bold' : 'bg-white/5 border-white/10 text-gray-300'}">
+                                    <span class="text-xs flex items-center gap-2.5">
+                                        <i class="fas ${s.icon} text-brandGold"></i> ${s.label}
+                                    </span>
+                                    ${appState.selectedDropSpot === s.id ? '<i class="fas fa-check-circle text-brandGold"></i>' : ''}
+                                </button>
+                            `).join("")}
+                        </div>
+                    </div>
+
+                    <button onclick="applyDecision('dropspot')" class="w-full py-3.5 rounded-2xl bg-brandGold text-brandNavyDark font-extrabold text-xs">
+                        Temassız Bırakmayı Onayla
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- KOMŞU SEÇİMİ ---
         function renderNeighbor() {
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
                     <div class="space-y-4">
                         <button onclick="renderOptions()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i>Geri</button>
-                        <h3 class="text-base font-extrabold text-white">Teslim Alacak Kişi</h3>
+                        <h3 class="text-base font-extrabold text-white">Teslim Alacak Komşu</h3>
 
                         <div class="space-y-2.5">
                             <div class="p-3.5 rounded-2xl bg-brandNavy border border-brandGold flex justify-between items-center">
                                 <div>
                                     <div class="text-xs font-bold text-white">Ahmet Yılmaz (Daire 4)</div>
-                                    <div class="text-[11px] text-gray-400">Kayıtlı Komşu • PIN ile Teslimat</div>
+                                    <div class="text-[11px] text-gray-400">Kayıtlı Komşu</div>
                                 </div>
                                 <i class="fas fa-check-circle text-brandGold"></i>
                             </div>
                             <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                                <label class="text-[10px] text-gray-400 block mb-1">Farklı Komşu / Görevli Adı</label>
-                                <input id="custom-neighbor" type="text" placeholder="Örn: Apartman Görevlisi Hasan Bey" class="bg-transparent text-xs text-white w-full focus:outline-none">
+                                <label class="text-[10px] text-gray-400 block mb-1">Farklı Bir Komşu Yaz</label>
+                                <input id="custom-neighbor" type="text" placeholder="Örn: Daire 7 Selin Hanım" class="bg-transparent text-xs text-white w-full focus:outline-none">
                             </div>
                         </div>
                     </div>
@@ -566,13 +633,13 @@
             `;
         }
 
-        // --- ALT EKRAN: KARGO OTOMATI SEÇİMİ ---
+        // --- KARGO OTOMATI SEÇİMİ ---
         function renderLocker() {
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
                     <div class="space-y-4">
                         <button onclick="renderOptions()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i>Geri</button>
-                        <h3 class="text-base font-extrabold text-white">Yakındaki Kargo Otomatları</h3>
+                        <h3 class="text-base font-extrabold text-white">Yakındaki Otomatlar</h3>
 
                         <div class="space-y-2.5">
                             ${lockers.map((l, idx) => `
@@ -581,34 +648,36 @@
                                         <span class="text-xs font-bold text-white">${l.name}</span>
                                         <span class="text-[10px] bg-brandGold/20 text-brandGold px-2 py-0.5 rounded font-bold">${l.dist}</span>
                                     </div>
-                                    <div class="text-[11px] text-emerald-400 mt-1"><i class="fas fa-box-open mr-1"></i>Boş Göz Mevcut • 7/24 Açık</div>
+                                    <div class="text-[11px] text-emerald-400 mt-1"><i class="fas fa-box-open mr-1"></i>Müsait • 7/24 Açık</div>
                                 </button>
                             `).join("")}
                         </div>
                     </div>
 
                     <button onclick="applyDecision('locker')" class="w-full py-3.5 rounded-2xl bg-brandGold text-brandNavyDark font-extrabold text-xs">
-                        ${lockers[appState.selectedLockerIndex].code} Otomatına Yönlendir
+                        ${lockers[appState.selectedLockerIndex].code} Noktasına Yönlendir
                     </button>
                 </div>
             `;
         }
 
-        // --- ALT EKRAN: 3 GÜN İÇİNDE GÜN + SAAT ERTELEME ---
+        // --- 3 GÜN İÇİNDE GÜN + SERBEST SAAT ERTELEME ---
         function renderReschedule() {
             const chosenDay = upcomingDays[appState.selectedDayIndex];
+            const resRange = `${formatMinutes(appState.resStartMins)} - ${formatMinutes(appState.resEndMins)}`;
+
             document.getElementById("screen").innerHTML = `
                 <div class="slide-in flex flex-col justify-between h-full">
                     <div class="space-y-4">
                         <button onclick="renderOptions()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-arrow-left mr-1"></i>Geri</button>
-                        <h3 class="text-base font-extrabold text-white">Gün ve Saat Aralığı Seçin</h3>
+                        <h3 class="text-base font-extrabold text-white">Yeni Gün ve Saat Seç</h3>
 
                         <!-- 3 Gün Seçimi -->
                         <div class="space-y-1.5">
-                            <span class="text-[11px] text-brandGold font-bold">1. Teslimat Günü (Önümüzdeki 3 Gün)</span>
+                            <span class="text-[11px] text-brandGold font-bold">Gün Seçin</span>
                             <div class="grid grid-cols-3 gap-2">
                                 ${upcomingDays.map((d, idx) => `
-                                    <button onclick="appState.selectedDayIndex=${idx}; renderReschedule()" class="p-2.5 rounded-xl border text-center transition-all ${appState.selectedDayIndex === idx ? 'bg-brandGold text-brandNavyDark border-brandGold font-extrabold shadow-md' : 'bg-white/5 text-gray-300 border-white/10 hover:border-brandGold/40'}">
+                                    <button onclick="appState.selectedDayIndex=${idx}; renderReschedule()" class="p-2.5 rounded-xl border text-center transition-all ${appState.selectedDayIndex === idx ? 'bg-brandGold text-brandNavyDark border-brandGold font-extrabold' : 'bg-white/5 text-gray-300 border-white/10'}">
                                         <div class="text-[11px] font-bold">${d.dateStr}</div>
                                         <div class="text-[10px] opacity-80">${d.dayName}</div>
                                     </button>
@@ -616,34 +685,54 @@
                             </div>
                         </div>
 
-                        <!-- Saat Seçimi -->
-                        <div class="space-y-1.5">
-                            <span class="text-[11px] text-brandGold font-bold">2. Saat Aralığı</span>
-                            <div class="grid grid-cols-2 gap-2">
-                                ${timeSlots.map(slot => `
-                                    <button onclick="appState.rescheduleSlot='${slot}'; renderReschedule()" class="py-2.5 px-2 rounded-xl text-[11px] font-bold border transition-all ${appState.rescheduleSlot === slot ? 'bg-brandGold text-brandNavyDark border-brandGold shadow-md' : 'bg-white/5 text-gray-300 border-white/10 hover:border-brandGold/40'}">
-                                        ${slot}
-                                    </button>
-                                `).join("")}
+                        <!-- Saat Aralığı Slider -->
+                        <div class="bg-brandNavy/80 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-300 font-semibold">Saat Aralığı</span>
+                                <span class="font-extrabold text-brandGold">${resRange}</span>
                             </div>
+                            <input type="range" min="540" max="1140" step="30" value="${appState.resStartMins}" oninput="updateRescheduleRange('start', this.value)" class="w-full">
+                            <input type="range" min="600" max="1200" step="30" value="${appState.resEndMins}" oninput="updateRescheduleRange('end', this.value)" class="w-full">
                         </div>
                     </div>
 
                     <button onclick="applyDecision('reschedule')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-xs shadow-lg">
-                        ${chosenDay.fullLabel} • ${appState.rescheduleSlot} Onayla
+                        ${chosenDay.fullLabel} • ${resRange} Onayla
                     </button>
                 </div>
             `;
         }
 
-        // --- KARARI UYGULA VE DASHBOARD'U GÜNCELLE ---
+        function updateRescheduleRange(which, val) {
+            val = parseInt(val, 10);
+            if (which === "start") {
+                appState.resStartMins = val;
+                if (appState.resEndMins <= appState.resStartMins + 30) {
+                    appState.resEndMins = Math.min(1200, appState.resStartMins + 60);
+                }
+            } else {
+                appState.resEndMins = val;
+                if (appState.resStartMins >= appState.resEndMins - 30) {
+                    appState.resStartMins = Math.max(540, appState.resEndMins - 60);
+                }
+            }
+            renderReschedule();
+        }
+
+        // --- KARARI UYGULA ---
         function applyDecision(type) {
             appState.decisionType = type;
             document.getElementById("tab-dot").classList.add("hidden");
 
             if (type === "tomorrow") {
-                appState.deliverySummary = `Yarın • ${appState.selectedSlot}`;
+                const rangeText = `${formatMinutes(appState.startMins)} - ${formatMinutes(appState.endMins)}`;
+                appState.deliverySummary = `Yarın • ${rangeText}`;
                 appState.deliveryBadge = "Saat Onaylı";
+                appState.deliveryBadgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
+            } else if (type === "dropspot") {
+                const spot = dropSpots.find(s => s.id === appState.selectedDropSpot);
+                appState.deliverySummary = `${spot.label}`;
+                appState.deliveryBadge = "Temassız Teslim";
                 appState.deliveryBadgeClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
             } else if (type === "neighbor") {
                 const custom = document.getElementById("custom-neighbor");
@@ -654,24 +743,20 @@
             } else if (type === "locker") {
                 const locker = lockers[appState.selectedLockerIndex];
                 appState.deliverySummary = `${locker.name}`;
-                appState.deliveryBadge = "Otomat Rezerve";
+                appState.deliveryBadge = "Otomat Seçildi";
                 appState.deliveryBadgeClass = "bg-purple-500/20 text-purple-300 border-purple-500/40";
             } else if (type === "reschedule") {
                 const d = upcomingDays[appState.selectedDayIndex];
-                appState.deliverySummary = `${d.fullLabel} • ${appState.rescheduleSlot}`;
+                const resRange = `${formatMinutes(appState.resStartMins)} - ${formatMinutes(appState.resEndMins)}`;
+                appState.deliverySummary = `${d.fullLabel} • ${resRange}`;
                 appState.deliveryBadge = "Ertelendi";
                 appState.deliveryBadgeClass = "bg-sky-500/20 text-sky-300 border-sky-500/40";
             }
 
-            logEvent(`Alıcı kararı: ${appState.deliverySummary}`, {
-                decision: appState.deliverySummary,
-                api: "08:00 SAP/Oracle Aktarıldı"
-            });
-
             renderTicket();
         }
 
-        // --- EKRAN 4: TESLİMAT ONAY KARTI & PIN/QR ---
+        // --- TESLİMAT KARTI (PIN / QR) ---
         function renderTicket() {
             setActiveTab("dashboard");
             document.getElementById("screen").innerHTML = `
@@ -686,24 +771,23 @@
                         <h3 class="text-base font-extrabold text-white">${appState.deliverySummary}</h3>
                     </div>
 
-                    <!-- Dijital Teslimat Kartı (PIN & QR) -->
                     <div class="bg-brandNavy/90 border border-brandGold/40 rounded-2xl p-4 space-y-3">
                         <div class="flex justify-between items-center text-[11px] border-b border-white/10 pb-2">
-                            <span class="text-gray-400">Gönderi Kodu</span>
+                            <span class="text-gray-400">Gönderi No</span>
                             <span class="font-mono font-bold text-white">#SD-84920</span>
                         </div>
                         <div class="flex items-center justify-around py-1">
                             <div>
-                                <span class="text-[10px] text-gray-400 block">Teslimat PIN</span>
+                                <span class="text-[10px] text-gray-400 block">Teslimat Kodu</span>
                                 <span class="text-2xl font-mono font-extrabold text-brandGold tracking-widest">${appState.pinCode}</span>
                             </div>
                             <div class="w-14 h-14 bg-white rounded-xl p-1.5 flex items-center justify-center text-brandNavyDark">
                                 <i class="fas fa-qrcode text-4xl"></i>
                             </div>
                         </div>
-                        <div class="text-[10px] text-emerald-400 bg-emerald-500/10 rounded-lg py-1.5 px-2 font-semibold">
-                            <i class="fas fa-check-circle mr-1"></i>Sabah 08:00 kurye rotasına işlendi
-                        </div>
+                        <p class="text-[11px] text-gray-400">
+                            Kurye teslimat anında bu kodu veya QR'ı okutarak paketi bırakır.
+                        </p>
                     </div>
 
                     <div class="space-y-2">
@@ -722,30 +806,27 @@
             appState = {
                 connected: false,
                 phone: "+90 532 480 26 16",
-                channel: "App Push",
-                selectedSlot: "14:00 - 16:00",
+                channel: "Push",
+                startMins: 840,
+                endMins: 1020,
                 selectedDayIndex: 0,
-                rescheduleSlot: "14:00 - 16:00",
+                resStartMins: 960,
+                resEndMins: 1140,
                 selectedLockerIndex: 0,
+                selectedDropSpot: "security",
+                mergedSecondCargo: false,
                 decisionType: null,
-                deliverySummary: "Yarın • 14:00 - 16:00",
-                deliveryBadge: "Teyit Bekliyor",
+                deliverySummary: "Yarın • 14:00 - 17:00",
+                deliveryBadge: "Saat Seçimi Bekliyor",
                 deliveryBadgeClass: "bg-brandGold/20 text-brandGold border-brandGold/40",
                 pinCode: "4829",
                 pushShown: false
             };
             dismissPush();
             document.getElementById("tab-dot").classList.add("hidden");
-            document.getElementById("jury-sync").textContent = "Bekleniyor";
-            document.getElementById("jury-decision").textContent = "Henüz Seçilmedi";
-            const apiEl = document.getElementById("jury-api");
-            apiEl.textContent = "Beklemede";
-            apiEl.className = "font-bold text-gray-400";
-            document.getElementById("api-log-list").innerHTML = "<div>[Sistem] Oturum sıfırlandı.</div>";
             renderConnect();
         }
 
-        // Başlangıç ekranı
         renderConnect();
     </script>
 </body>
