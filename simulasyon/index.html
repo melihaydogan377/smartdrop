@@ -217,7 +217,7 @@
 
         function navTo(target) {
             if (!appState.connected && target !== "connect") {
-                showToast("Önce telefon veya takip kodu ile giriş yapın");
+                showToast("Önce telefon numaranızla giriş yapın");
                 renderConnect();
                 return;
             }
@@ -263,77 +263,43 @@
             setTimeout(() => { container.innerHTML = ""; }, 2200);
         }
 
-        // --- 1. EKRAN: NUMARA BAĞLAMA VEYA TAKİP KODU İLE EKLEME ---
+        // --- 1. EKRAN: TEK GİRİŞ (TELEFON NUMARASI + SMS DOĞRULAMA) ---
         function renderConnect() {
             setActiveTab("connect");
             document.getElementById("screen").innerHTML = `
-                <div class="slide-in flex flex-col justify-between h-full space-y-4">
-                    <div class="text-center mt-2">
-                        <div class="w-14 h-14 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-xl mx-auto mb-3">
-                            <i class="fas fa-box-open"></i>
+                <div class="slide-in flex flex-col justify-between h-full">
+                    <div class="text-center mt-6">
+                        <div class="w-16 h-16 rounded-2xl bg-brandGold/15 border border-brandGold/40 text-brandGold flex items-center justify-center text-2xl mx-auto mb-4">
+                            <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h3 class="text-lg font-extrabold text-white">Kargolarını Yönet</h3>
-                        <p class="text-[11px] text-gray-400 mt-1">
-                            Numaranı bağla veya doğrudan takip koduyla kargo ekle.
+                        <h3 class="text-xl font-extrabold text-white">SmartDrop'a Giriş Yap</h3>
+                        <p class="text-xs text-gray-400 mt-1.5 px-2">
+                            Telefon numaranla giriş yap; adına kayıtlı kargolar otomatik gelsin, istersen içeride takip kodu da ekle.
                         </p>
                     </div>
 
-                    <!-- YÖNTEM 1: TELEFON İLE OTOMATİK -->
-                    <div class="bg-brandNavy/80 border border-brandGold/30 rounded-2xl p-3.5 space-y-2.5">
-                        <div class="flex justify-between items-center">
-                            <label class="text-[11px] text-brandGold font-bold">1. Otomatik Tarama (Telefon)</label>
-                            <span class="text-[10px] text-gray-400">Tüm Firmalar</span>
+                    <div class="space-y-3 my-4">
+                        <div class="bg-brandNavy/80 border border-brandGold/30 rounded-2xl p-4 space-y-2">
+                            <label class="text-[11px] text-gray-400 font-semibold">Cep Telefonu Numaran</label>
+                            <div class="flex items-center bg-brandNavyDark border border-brandGold/40 rounded-xl px-3.5 py-3">
+                                <i class="fas fa-phone text-brandGold mr-2.5 text-sm"></i>
+                                <input id="phone-input" type="text" value="${appState.phone}" class="bg-transparent text-white font-bold text-sm w-full focus:outline-none">
+                            </div>
                         </div>
-                        <div class="flex items-center bg-brandNavyDark border border-white/15 rounded-xl px-3 py-2.5">
-                            <i class="fas fa-phone text-brandGold mr-2 text-xs"></i>
-                            <input id="phone-input" type="text" value="${appState.phone}" class="bg-transparent text-white font-bold text-xs w-full focus:outline-none">
+
+                        <div class="flex items-center justify-between text-[11px] text-gray-400 px-2">
+                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Yurtiçi</span>
+                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Aras</span>
+                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>MNG</span>
+                            <span><i class="fas fa-check text-emerald-400 mr-1"></i>Trendyol Exp.</span>
                         </div>
-                        <button onclick="startOtpVerification()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-xs shadow-lg active:scale-95 transition-all">
-                            Numara ile Devam Et <i class="fas fa-arrow-right ml-1"></i>
-                        </button>
                     </div>
 
-                    <!-- AYIRAÇ -->
-                    <div class="flex items-center gap-3 text-[10px] text-gray-500 uppercase font-bold">
-                        <div class="h-px bg-white/10 flex-1"></div>
-                        <span>veya kod ile ekle</span>
-                        <div class="h-px bg-white/10 flex-1"></div>
-                    </div>
-
-                    <!-- YÖNTEM 2: MANUEL TAKİP KODU GİRİŞİ -->
-                    <div class="bg-white/5 border border-white/15 rounded-2xl p-3.5 space-y-2.5">
-                        <label class="text-[11px] text-white font-bold block">2. Takip Numarası ile Ekle</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <select id="entry-carrier" class="col-span-1 bg-brandNavyDark border border-white/15 rounded-xl px-2 py-2.5 text-[11px] text-white font-semibold focus:outline-none focus:border-brandGold">
-                                <option value="Yurtiçi Kargo">Yurtiçi</option>
-                                <option value="Aras Kargo">Aras</option>
-                                <option value="MNG Kargo">MNG</option>
-                                <option value="PTT Kargo">PTT</option>
-                                <option value="Trendyol Exp.">Trendyol</option>
-                            </select>
-                            <input id="entry-code" type="text" placeholder="Takip Kodu (Örn: 9482710)" class="col-span-2 bg-brandNavyDark border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 font-mono focus:outline-none focus:border-brandGold">
-                        </div>
-                        <button onclick="startWithManualCode()" class="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-xs transition-all">
-                            <i class="fas fa-plus mr-1 text-brandGold"></i> Kargo Koduyla Ekle
-                        </button>
-                    </div>
+                    <button onclick="startOtpVerification()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brandGold to-brandGoldLight text-brandNavyDark font-extrabold text-sm shadow-xl active:scale-95 transition-all">
+                        Giriş Yap <i class="fas fa-arrow-right ml-1.5"></i>
+                    </button>
                 </div>
             `;
-        }
-
-        function startWithManualCode() {
-            const carrier = document.getElementById("entry-carrier").value;
-            const rawCode = document.getElementById("entry-code").value.trim().toUpperCase();
-            const code = rawCode || "9482710";
-
-            appState.connected = true;
-            appState.activeCarrier = carrier;
-            appState.activeTrackingCode = code;
-            appState.activeStore = "Manuel Eklenen Gönderi";
-            document.getElementById("tab-dot").classList.remove("hidden");
-
-            showToast(`${carrier} (#${code}) eklendi`);
-            renderDashboard();
         }
 
         function startOtpVerification() {
@@ -357,7 +323,7 @@
                         <div id="otp-4" class="w-12 h-14 rounded-xl bg-brandNavyDark border border-brandGold/50 flex items-center justify-center text-xl font-extrabold text-brandGold">•</div>
                     </div>
 
-                    <p class="text-xs text-gray-400">Kargoların taranıyor...</p>
+                    <p class="text-xs text-gray-400">Kargoların getiriliyor...</p>
                 </div>
             `;
 
@@ -376,7 +342,7 @@
             }, 1250);
         }
 
-        // --- 2. EKRAN: KARGOLARIM + KOD İLE EKLEME ÇUBUĞU ---
+        // --- 2. EKRAN: KARGOLARIM + KOD İLE KARGO EKLEME ---
         function renderDashboard() {
             setActiveTab("dashboard");
             const isConfirmed = appState.decisionType !== null;
@@ -393,7 +359,7 @@
                         </button>
                     </div>
 
-                    <!-- HIZLI TAKİP KODU EKLEME ALANI (Açılır/Kapanır) -->
+                    <!-- TAKİP KODU İLE KARGO EKLEME ALANI -->
                     <div id="quick-add-box" class="hidden bg-brandNavyDark border border-brandGold/40 rounded-2xl p-3 space-y-2 slide-in">
                         <div class="flex justify-between items-center text-[11px]">
                             <span class="text-brandGold font-bold">Takip Kodu ile Kargo Ekle</span>
@@ -410,7 +376,7 @@
                             <input id="dash-code" type="text" placeholder="Takip Kodu Girin" class="col-span-2 bg-[#071936] border border-white/15 rounded-xl px-2.5 py-2 text-xs text-white placeholder-gray-500 font-mono focus:outline-none focus:border-brandGold">
                         </div>
                         <button onclick="addManualCargoInDashboard()" class="w-full py-2 rounded-xl bg-brandGold text-brandNavyDark font-extrabold text-xs">
-                            Listeye Ekle
+                            Kargoyu Ekle
                         </button>
                     </div>
 
@@ -452,7 +418,7 @@
                         </button>
                     </div>
 
-                    <!-- MANUEL EKLENEN KARGOLAR -->
+                    <!-- TAKİP KODUYLA EKLENEN KARGOLAR -->
                     ${appState.manualCargos.map((mc, idx) => `
                         <div class="bg-white/5 border border-brandGold/30 rounded-2xl p-3.5 flex justify-between items-center slide-in">
                             <div>
@@ -515,7 +481,7 @@
             appState.manualCargos.unshift({
                 carrier: carrier,
                 code: rawCode,
-                summary: "Yarın • 14:00 - 17:00 (Yeni Eklendi)"
+                summary: "Yarın • 14:00 - 17:00 (Kod ile Eklendi)"
             });
             showToast(`${carrier} (#${rawCode}) eklendi`);
             renderDashboard();
