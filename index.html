@@ -63,7 +63,6 @@
         .glass-card:hover {
             border-color: rgba(212, 175, 55, 0.4);
             box-shadow: 0 20px 40px -15px rgba(212, 175, 55, 0.12);
-            transform: translateY(-5px);
         }
 
         /* Parlama & Işıma Efektleri */
@@ -98,6 +97,11 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Telefon Çerçevesi Animasyonu */
+        .phone-mockup {
+            box-shadow: 0 25px 70px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+        }
+
         /* Özel Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -117,13 +121,16 @@
     <canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
 
     <!-- Sabit Header / Navigasyon -->
-    <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-brandNavyDark/70 border-b border-white/5 transition-all duration-300">
+    <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-brandNavyDark/80 border-b border-white/5 transition-all duration-300">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-2xl font-extrabold tracking-wider flex items-center space-x-2">
                 <span class="text-white">Smart</span><span class="gold-gradient-text">Drop</span>
             </a>
             
             <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#senaryo" class="text-brandGold font-semibold hover:text-brandGoldLight transition-colors flex items-center gap-1.5">
+                    <i class="fas fa-play-circle text-xs"></i> Canlı Senaryo
+                </a>
                 <a href="#hakkimizda" class="hover:text-brandGold transition-colors">Hakkımızda</a>
                 <a href="#vizyon" class="hover:text-brandGold transition-colors">Misyon & Vizyon</a>
                 <a href="#ozellikler" class="hover:text-brandGold transition-colors">Çözümlerimiz</a>
@@ -139,7 +146,7 @@
     <div class="relative z-10 pt-24">
 
         <!-- HERO SECTION (Dev Logo & Giriş) -->
-        <section class="min-h-[90vh] flex flex-col justify-center items-center text-center px-6 relative py-12">
+        <section class="min-h-[85vh] flex flex-col justify-center items-center text-center px-6 relative py-12">
             
             <!-- Rozet / Status Badge -->
             <div class="hero-anim inline-flex items-center space-x-3 bg-brandNavy/80 border border-brandGold/30 px-5 py-2.5 rounded-full mb-8 backdrop-blur-md shadow-xl">
@@ -149,10 +156,8 @@
 
             <!-- Dev Logo Alanı -->
             <div class="hero-anim logo-glow-container relative mb-10 w-full max-w-lg mx-auto flex justify-center items-center">
-                <!-- Arka Dönen Halka -->
-                <div class="orbit-ring absolute w-[320px] h-[320px] md:w-[420px] md:h-[420px] rounded-full pointer-events-none"></div>
+                <div class="orbit-ring absolute w-[320px] h-[320px] md:w-[400px] md:h-[400px] rounded-full pointer-events-none"></div>
                 
-                <!-- Logo Kartı -->
                 <div class="relative z-10 p-8 md:p-12 rounded-3xl glass-card border border-brandGold/30 shadow-2xl backdrop-blur-2xl w-full max-w-md">
                     <img src="logo.png" alt="SmartDrop Logo" class="w-full h-auto object-contain drop-shadow-[0_10px_20px_rgba(212,175,55,0.3)]" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-5xl md:text-6xl font-black py-6 tracking-tight\'><span class=\'text-white\'>Smart</span><span class=\'gold-gradient-text\'>Drop</span></div>'">
                 </div>
@@ -165,11 +170,11 @@
             </h1>
 
             <p class="hero-anim text-gray-300 text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed">
-                Son mil (last-mile) teslimatlarındaki verimsizlikleri ortadan kaldıran, akıllı teyit mekanizmalı yenilikçi teslimat platformu.
+                Tüm kargolarınızı tek ekranda toplayan, dağıtımdan 24 saat önce canlı teyit alarak başarısız teslimatları sıfırlayan akıllı teslimat ekosistemi.
             </p>
 
-            <!-- E-posta Formu -->
-            <div id="bulten" class="hero-anim w-full max-w-md mb-12">
+            <!-- E-posta Formu & Demo Butonu -->
+            <div id="bulten" class="hero-anim w-full max-w-lg mb-8">
                 <form id="notify-form" class="flex flex-col sm:flex-row gap-3">
                     <input 
                         type="email" 
@@ -187,6 +192,172 @@
                 <p id="form-message" class="text-xs text-brandGold mt-3 hidden font-medium">Talebiniz alındı! Açılışta ilk siz haberdar olacaksınız.</p>
             </div>
 
+            <a href="#senaryo" class="hero-anim text-xs uppercase tracking-widest text-gray-400 hover:text-brandGold transition-colors flex flex-col items-center gap-2 mt-4">
+                <span>Sistemi Canlı Deneyimle</span>
+                <i class="fas fa-chevron-down animate-bounce text-brandGold"></i>
+            </a>
+        </section>
+
+        <!-- İNTERAKTİF SENARYO SİMÜLATÖRÜ SECTION -->
+        <section id="senaryo" class="py-24 px-6 container mx-auto">
+            <div class="reveal-anim max-w-6xl mx-auto">
+                
+                <!-- Bölüm Başlığı -->
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brandGold/10 border border-brandGold/30 text-brandGold text-xs uppercase tracking-widest font-bold mb-4">
+                        <i class="fas fa-mobile-alt"></i> İnteraktif Deneyim
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-black mb-4 text-white">
+                        SmartDrop <span class="gold-gradient-text">Nasıl Çalışır?</span>
+                    </h2>
+                    <p class="text-gray-400 font-light text-base md:text-lg">
+                        Kargonuz dağıtıma çıkmadan 24 saat önce sistem devreye girer. Aşağıdaki senaryolardan birini seçerek alıcı ve kurye arasındaki akıllı süreci canlı test edin.
+                    </p>
+                </div>
+
+                <!-- Simülatör Ana Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center glass-card rounded-3xl p-6 md:p-12 border border-brandGold/25">
+                    
+                    <!-- Sol Taraf: Senaryo Kontrol Paneli & Akış Adımları -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <div>
+                                <span class="text-xs text-brandGold uppercase tracking-wider font-bold">Adım 1: Bildirim Kanalı</span>
+                                <h3 class="text-xl font-bold text-white mt-1">24 Saat Önce Akıllı Teyit Uyarısı</h3>
+                            </div>
+                            <!-- Kanal Seçici -->
+                            <div class="flex bg-brandNavyDark/80 p-1 rounded-xl border border-white/10 text-xs">
+                                <button onclick="setChannel('app')" id="ch-app" class="channel-btn px-3 py-1.5 rounded-lg bg-brandGold text-brandNavyDark font-bold transition-all">App Push</button>
+                                <button onclick="setChannel('sms')" id="ch-sms" class="channel-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition-all">SMS</button>
+                                <button onclick="setChannel('ivr')" id="ch-ivr" class="channel-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition-all">Sesli Arama</button>
+                            </div>
+                        </div>
+
+                        <p class="text-sm text-gray-300 font-light">
+                            Yarın teslim edilecek <strong class="text-white">#SD-84920</strong> numaralı gönderiniz için alıcıya ulaşılır. Alıcının verdiği yanıta göre sistem anında aksiyon alır:
+                        </p>
+
+                        <!-- Senaryo Seçim Butonları -->
+                        <div class="space-y-3">
+                            <span class="text-xs text-brandGold uppercase tracking-wider font-bold block mb-2">Adım 2: Bir Alıcı Senaryosu Seçin</span>
+                            
+                            <!-- Senaryo 1 -->
+                            <button onclick="selectScenario('home')" id="btn-home" class="scenario-btn w-full text-left p-4 rounded-2xl border border-brandGold bg-brandNavy/80 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/30">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-base">1. "Evet, Yarın Evdeyim"</h4>
+                                        <p class="text-xs text-gray-400 mt-0.5">Alıcı adreste olacağını tek tıkla onaylar.</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-brandGold group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+
+                            <!-- Senaryo 2 -->
+                            <button onclick="selectScenario('neighbor')" id="btn-neighbor" class="scenario-btn w-full text-left p-4 rounded-2xl border border-white/10 bg-brandNavyDark/50 hover:border-brandGold/50 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg border border-amber-500/30">
+                                        <i class="fas fa-store"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-base">2. "Komşuya / Esnafa Bırak"</h4>
+                                        <p class="text-xs text-gray-400 mt-0.5">Evde değilim; güvenilir komşu veya teslim noktası seçilir.</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-500 group-hover:text-brandGold group-hover:translate-x-1 transition-all"></i>
+                            </button>
+
+                            <!-- Senaryo 3 -->
+                            <button onclick="selectScenario('reschedule')" id="btn-reschedule" class="scenario-btn w-full text-left p-4 rounded-2xl border border-white/10 bg-brandNavyDark/50 hover:border-brandGold/50 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg border border-sky-500/30">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-base">3. "Teslimat Tarihini Ertele"</h4>
+                                        <p class="text-xs text-gray-400 mt-0.5">Şehir dışındayım; teslimat uygun güne kaydırılır.</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-chevron-right text-gray-500 group-hover:text-brandGold group-hover:translate-x-1 transition-all"></i>
+                            </button>
+                        </div>
+
+                        <!-- Operasyonel Etki Göstergesi (Canlı Metrikler) -->
+                        <div class="grid grid-cols-3 gap-3 pt-4 border-t border-white/10">
+                            <div class="bg-brandNavyDark/70 p-3.5 rounded-xl border border-white/5 text-center">
+                                <span class="text-[11px] text-gray-400 block">Kurye Durumu</span>
+                                <span id="metric-courier" class="text-xs md:text-sm font-bold text-emerald-400 mt-1 block">Rota Onaylandı</span>
+                            </div>
+                            <div class="bg-brandNavyDark/70 p-3.5 rounded-xl border border-white/5 text-center">
+                                <span class="text-[11px] text-gray-400 block">Teslimat Başarısı</span>
+                                <span id="metric-success" class="text-xs md:text-sm font-bold text-brandGold mt-1 block">%100 İlk Sefer</span>
+                            </div>
+                            <div class="bg-brandNavyDark/70 p-3.5 rounded-xl border border-white/5 text-center">
+                                <span class="text-[11px] text-gray-400 block">Karbon & Yakıt</span>
+                                <span id="metric-eco" class="text-xs md:text-sm font-bold text-sky-400 mt-1 block">Tasarruf Sağlandı</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sağ Taraf: Canlı Mobil Uygulama / Ekran Simülasyonu -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="phone-mockup w-full max-w-[330px] bg-[#041229] rounded-[2.5rem] border-[6px] border-[#162B4D] p-5 relative overflow-hidden">
+                            
+                            <!-- Telefon Üst Çentik (Notch) -->
+                            <div class="w-28 h-5 bg-[#162B4D] rounded-b-2xl mx-auto -mt-5 mb-4 flex items-center justify-center">
+                                <div class="w-10 h-1 bg-gray-600 rounded-full"></div>
+                            </div>
+
+                            <!-- Üst Durum Çubuğu -->
+                            <div class="flex justify-between items-center text-[11px] text-gray-400 mb-4 px-1">
+                                <span class="font-semibold text-white">09:41</span>
+                                <span id="channel-badge" class="px-2 py-0.5 rounded bg-brandGold/20 text-brandGold font-semibold text-[10px]">
+                                    <i class="fas fa-bell mr-1"></i> SmartDrop App
+                                </span>
+                                <div class="space-x-1">
+                                    <i class="fas fa-wifi"></i>
+                                    <i class="fas fa-battery-full text-emerald-400"></i>
+                                </div>
+                            </div>
+
+                            <!-- Konsolide Kargo Kartı -->
+                            <div class="bg-brandNavy/90 border border-brandGold/30 rounded-2xl p-4 mb-4 shadow-lg">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <span class="text-[10px] uppercase tracking-wider text-brandGold font-bold">Konsolide Takip</span>
+                                        <h5 class="text-sm font-bold text-white">Gönderi #SD-84920</h5>
+                                    </div>
+                                    <span id="status-pill" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                        Onaylandı
+                                    </span>
+                                </div>
+                                <p class="text-[11px] text-gray-300 flex items-center gap-1.5">
+                                    <i class="fas fa-truck text-brandGold"></i>
+                                    <span id="carrier-info">Tahmini Teslimat: Yarın, 10:00 - 13:00</span>
+                                </p>
+                            </div>
+
+                            <!-- Dinamik Simülasyon Ekran İçeriği -->
+                            <div id="phone-screen-content" class="bg-white/5 border border-white/10 rounded-2xl p-4 min-h-[230px] flex flex-col justify-between transition-all duration-300">
+                                <!-- İçerik JavaScript ile dinamik dolar -->
+                            </div>
+
+                            <!-- Alt Sistem Logu -->
+                            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px]">
+                                <span class="text-gray-400 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    Kurye Paneli Senkronize
+                                </span>
+                                <span class="text-brandGold font-semibold">Canlı</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
         <!-- HAKKIMIZDA SECTION -->
@@ -307,7 +478,7 @@
 
     </div>
 
-    <!-- JAVASCRIPT ANIMASYON MANTIĞI -->
+    <!-- JAVASCRIPT ANIMASYON & SENARYO SİMÜLATÖRÜ MANTIĞI -->
     <script>
         // GSAP ScrollTrigger Kayıt
         gsap.registerPlugin(ScrollTrigger);
@@ -343,6 +514,142 @@
             message.classList.remove('hidden');
             this.reset();
         });
+
+        // --- İNTERAKTİF SENARYO SİMÜLATÖRÜ ---
+        const scenarios = {
+            home: {
+                statusText: "Evde Teslimat Onaylı",
+                statusClass: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+                carrierInfo: "Yarın, 10:00 - 13:00 • Kurye Rotasında",
+                metricCourier: "Rota Kilitlendi",
+                metricSuccess: "%100 İlk Sefer",
+                metricEco: "0 Boşa Sefer",
+                html: `
+                    <div>
+                        <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold mb-2">
+                            <i class="fas fa-check-circle"></i> Alıcı Teyidi Alındı
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+                            "Merhaba! Yarın 10:00 - 13:00 saatleri arasında adresimde olacağım, teslimatı bekliyorum."
+                        </p>
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-[11px] text-emerald-300">
+                            <strong>Sistem Aksiyonu:</strong> Kurye navigasyonunda öncelikli durak olarak işaretlendi. Teslimat PIN kodu oluşturuldu: <span class="font-mono font-bold text-white">4829</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-[11px]">
+                        <span class="text-gray-400">Tahmini Bekleme Süresi</span>
+                        <span class="text-emerald-400 font-bold">&lt; 1 Dakika</span>
+                    </div>
+                `
+            },
+            neighbor: {
+                statusText: "Alternatif Nokta",
+                statusClass: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+                carrierInfo: "Yarın • Güvenilir Esnaf / Komşu",
+                metricCourier: "Rota Güncellendi",
+                metricSuccess: "%100 İlk Sefer",
+                metricEco: "İade Önledi",
+                html: `
+                    <div>
+                        <div class="flex items-center gap-2 text-amber-400 text-xs font-bold mb-2">
+                            <i class="fas fa-map-marker-alt"></i> Yönlendirme Talebi
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+                            "Yarın evde olmayacağım. Paketimin apartman girişindeki <strong>Yıldız Eczanesi</strong>'ne bırakılmasını onaylıyorum."
+                        </p>
+                        <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-[11px] text-amber-200">
+                            <strong>Sistem Aksiyonu:</strong> Teslimat adresi 40m yakındaki anlaşmalı noktaya kaydırıldı. Teslim anında alıcıya SMS & Fotoğraf kanıtı iletilecek.
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-[11px]">
+                        <span class="text-gray-400">Ek Maliyet</span>
+                        <span class="text-brandGold font-bold">0,00 ₺ (Ücretsiz)</span>
+                    </div>
+                `
+            },
+            reschedule: {
+                statusText: "Tarih Ertelendi",
+                statusClass: "bg-sky-500/20 text-sky-400 border-sky-500/30",
+                carrierInfo: "Cuma, 14:00 - 17:00 • Planlandı",
+                metricCourier: "Araçtan Çıkarıldı",
+                metricSuccess: "Yakıt Tasarrufu",
+                metricEco: "-1.4 kg CO₂",
+                html: `
+                    <div>
+                        <div class="flex items-center gap-2 text-sky-400 text-xs font-bold mb-2">
+                            <i class="fas fa-calendar-check"></i> Akıllı Takvim Güncellemesi
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+                            "Şehir dışındayım. Teslimatın <strong>Cuma günü 14:00 - 17:00</strong> aralığında yapılmasını istiyorum."
+                        </p>
+                        <div class="bg-sky-500/10 border border-sky-500/20 rounded-xl p-3 text-[11px] text-sky-200">
+                            <strong>Sistem Aksiyonu:</strong> Paket sabah dağıtım aracına hiç yüklenmeden şubede beklemeye alındı. Boşa yakıt ve kurye zamanı kaybı önlendi.
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-[11px]">
+                        <span class="text-gray-400">Operasyon Kazancı</span>
+                        <span class="text-sky-400 font-bold">1 Gereksiz Sefer İptal</span>
+                    </div>
+                `
+            }
+        };
+
+        function selectScenario(key) {
+            const data = scenarios[key];
+            if (!data) return;
+
+            // Buton stillerini güncelle
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('border-brandGold', 'bg-brandNavy/80');
+                btn.classList.add('border-white/10', 'bg-brandNavyDark/50');
+            });
+            const activeBtn = document.getElementById('btn-' + key);
+            activeBtn.classList.remove('border-white/10', 'bg-brandNavyDark/50');
+            activeBtn.classList.add('border-brandGold', 'bg-brandNavy/80');
+
+            // Telefon ekranını yumuşak geçişle güncelle
+            const screen = document.getElementById('phone-screen-content');
+            gsap.to(screen, {
+                opacity: 0,
+                y: 8,
+                duration: 0.18,
+                onComplete: () => {
+                    screen.innerHTML = data.html;
+                    const pill = document.getElementById('status-pill');
+                    pill.textContent = data.statusText;
+                    pill.className = `px-2.5 py-1 rounded-full text-[10px] font-bold border ${data.statusClass}`;
+                    
+                    document.getElementById('carrier-info').textContent = data.carrierInfo;
+                    document.getElementById('metric-courier').textContent = data.metricCourier;
+                    document.getElementById('metric-success').textContent = data.metricSuccess;
+                    document.getElementById('metric-eco').textContent = data.metricEco;
+
+                    gsap.to(screen, { opacity: 1, y: 0, duration: 0.25 });
+                }
+            });
+        }
+
+        function setChannel(channel) {
+            document.querySelectorAll('.channel-btn').forEach(btn => {
+                btn.classList.remove('bg-brandGold', 'text-brandNavyDark', 'font-bold');
+                btn.classList.add('text-gray-400');
+            });
+            const activeCh = document.getElementById('ch-' + channel);
+            activeCh.classList.remove('text-gray-400');
+            activeCh.classList.add('bg-brandGold', 'text-brandNavyDark', 'font-bold');
+
+            const badge = document.getElementById('channel-badge');
+            if (channel === 'app') {
+                badge.innerHTML = '<i class="fas fa-bell mr-1"></i> SmartDrop App';
+            } else if (channel === 'sms') {
+                badge.innerHTML = '<i class="fas fa-comment-dots mr-1"></i> Akıllı SMS Linki';
+            } else if (channel === 'ivr') {
+                badge.innerHTML = '<i class="fas fa-phone-volume mr-1"></i> Sesli Asistan (IVR)';
+            }
+        }
+
+        // Sayfa açılışında ilk senaryoyu yükle
+        selectScenario('home');
 
         // Arka Plan Parçacık (Canvas Particles) Sistemi
         const canvas = document.getElementById('particles-canvas');
